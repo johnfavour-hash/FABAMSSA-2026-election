@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: bamssa-elections-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements-render.txt
+    startCommand: gunicorn app:app --workers 1 --threads 4 --timeout 120
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: BAMSSA_ADMIN_PASSCODE
+        sync: false
+      - key: BAMSSA_ADMIN_NAME
+        value: Administrator
+      - key: BAMSSA_ADMIN_EMAILS
+        sync: false
+      - key: BAMSSA_CORS_ORIGINS
+        value: https://bamssa-elections-frontend.onrender.com
+
+  - type: web
+    name: bamssa-elections-frontend
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://bamssa-elections-api.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

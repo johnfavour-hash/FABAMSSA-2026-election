@@ -1,0 +1,6 @@
+{
+  "name": "BAMSSA UNIPORT Elections 2026",
+  "description": "Official democratic voting and electoral integrity platform for the Basic Medical Science Students' Association, University of Port Harcourt Chapter.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

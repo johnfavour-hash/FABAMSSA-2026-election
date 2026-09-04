@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="BAMSSA Elections icon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#131b2e"/>
+      <stop offset="100%" stop-color="#213d7f"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e2ebff"/>
+      <stop offset="100%" stop-color="#9ec5ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#bg)"/>
+  <path d="M20 16h14.5c9.6 0 17.5 6 17.5 16 0 7.5-4.1 12.6-10.3 14.8L52 48H42.3l-8.6-12.6H27V48H20V16zm7 7v12.7h7.5c4.3 0 8-2.2 8-6.3 0-4.3-3.7-6.4-8-6.4H27z" fill="url(#accent)"/>
+  <circle cx="46" cy="18" r="5" fill="#7dd3fc"/>
+</svg>

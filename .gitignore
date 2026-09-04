@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+backend/venv/
+venv/
+.venv/
+
+# Production
+build/
+dist/
+
+# Tests & coverage
+coverage/
+.pytest_cache/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Databases & local state
+*.db
+*.sqlite
+*.sqlite3
+instance/
+
+# OS Files
+.DS_Store
+Thumbs.db
+*.log
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Raw uncompressed video files (>100MB exceeds GitHub limit)
+src/public/*.mp4
