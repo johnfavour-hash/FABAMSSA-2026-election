@@ -61,9 +61,7 @@ interface ElectionContextType {
 
 const ElectionContext = createContext<ElectionContextType | undefined>(undefined);
 
-const configuredApiBase = (
-  import.meta.env.VITE_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL
-)?.replace(/\/+$/, '');
+const configuredApiBase = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/+$/, '');
 const API_BASE = configuredApiBase
   ? (configuredApiBase.endsWith('/api')
     ? configuredApiBase
@@ -105,6 +103,7 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
 
   const [currentVoter, setCurrentVoter] = useState<Voter | null>(() => {
+    if (typeof window === 'undefined') return null;
     const storedVoter = localStorage.getItem(STORAGE_KEYS.CURRENT_VOTER);
     if (!storedVoter) return null;
     try {
@@ -116,8 +115,8 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   });
   const [voterSession, setVoterSession] = useState<string | null>(null);
 
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean>(() => localStorage.getItem(STORAGE_KEYS.ADMIN_AUTH) === 'true');
-  const [adminSession, setAdminSession] = useState<string | null>(() => localStorage.getItem(STORAGE_KEYS.ADMIN_SESSION));
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean>(() => typeof window !== 'undefined' && localStorage.getItem(STORAGE_KEYS.ADMIN_AUTH) === 'true');
+  const [adminSession, setAdminSession] = useState<string | null>(() => typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.ADMIN_SESSION) : null);
   const [adminName, setAdminName] = useState('Administrator');
   const [adminEmail, setAdminEmail] = useState('');
   const [adminAvatarUrl, setAdminAvatarUrl] = useState<string | null>(null);

@@ -110,7 +110,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
     resetElectionData,
   } = useElection();
 
-  const configuredApiBase = import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, '');
+  const configuredApiBase = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/+$/, '');
   const API_BASE = configuredApiBase
     ? (configuredApiBase.endsWith('/api')
       ? configuredApiBase

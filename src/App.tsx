@@ -66,7 +66,7 @@ function ElectionAppContent() {
   const [showEligibilityModal, setShowEligibilityModal] = useState(false);
   const [showVoterLoginModal, setShowVoterLoginModal] = useState(false);
   const [showElecoAdminModal, setShowElecoAdminModal] = useState(false);
-  const [showOnboardingTour, setShowOnboardingTour] = useState(() => localStorage.getItem('election_onboarding_completed') !== 'true');
+  const [showOnboardingTour, setShowOnboardingTour] = useState(() => typeof window === 'undefined' || localStorage.getItem('election_onboarding_completed') !== 'true');
   const [showAdminOnboardingTour, setShowAdminOnboardingTour] = useState(false);
   const [selectedAccreditationVoter, setSelectedAccreditationVoter] = useState<Voter | null>(null);
 
