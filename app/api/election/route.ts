@@ -36,6 +36,13 @@ type DepartmentStatRow = {
   voted: number;
 };
 
+type PublicVoterRow = {
+  department: string;
+  is_eligible: boolean | number;
+  is_accredited: boolean | number;
+  has_voted: boolean | number;
+};
+
 export async function GET() {
   try {
     const supabase = getSupabaseAdmin();
@@ -68,11 +75,26 @@ export async function GET() {
       status = 'CLOSED';
     }
 
-    const departmentStats = Object.fromEntries(
+    const storedDepartmentStats = Object.fromEntries(
       ((statsResult.data ?? []) as DepartmentStatRow[]).map((row) => [row.department, {
         eligible: row.eligible,
         accredited: row.accredited,
         voted: row.voted,
+      }]),
+    );
+    const departmentStats = Object.fromEntries(
+      Object.entries((votersResult.data ?? []).reduce<Record<string, { eligible: number; accredited: number; voted: number }>>((stats, voter) => {
+        const row = voter as PublicVoterRow;
+        const department = row.department;
+        stats[department] ||= { eligible: 0, accredited: 0, voted: 0 };
+        if (Boolean(row.is_eligible)) stats[department].eligible += 1;
+        if (Boolean(row.is_accredited)) stats[department].accredited += 1;
+        if (Boolean(row.has_voted)) stats[department].voted += 1;
+        return stats;
+      }, {})).map(([department, counts]) => [department, {
+        eligible: counts.eligible,
+        accredited: counts.accredited,
+        voted: counts.voted,
       }]),
     );
 
@@ -83,7 +105,7 @@ export async function GET() {
       positions: positionsResult.data ?? [],
       voters: votersResult.data ?? [],
       audit_logs: [],
-      department_stats: departmentStats,
+      department_stats: Object.keys(departmentStats).length ? departmentStats : storedDepartmentStats,
       commission_members: membersResult.data ?? [],
     }, { headers: { 'Cache-Control': 'no-store' } });
   } catch {
