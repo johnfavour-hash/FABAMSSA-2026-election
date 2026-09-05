@@ -63,7 +63,7 @@ export async function POST(request: Request) {
     } else if (name && name !== profile.full_name) {
       await supabase
         .from('admin_profiles')
-        .update({ full_name: name, updated_at: new Date().toISOString() })
+        .update({ full_name: name, updated_at: new Date().toISOString() } as never)
         .eq('id', profile.id);
       profile = { ...profile, full_name: name };
     }
