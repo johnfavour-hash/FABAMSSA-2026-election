@@ -34,7 +34,7 @@ export const IntegritySection: React.FC = () => {
           <div
             className="w-full h-full min-h-[380px] bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
             style={{
-              backgroundImage: `url('${electoosImage}')`
+              backgroundImage: `url('${electoosImage.src}')`
             }}
           ></div>
 

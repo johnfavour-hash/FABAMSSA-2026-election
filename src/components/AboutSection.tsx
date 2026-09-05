@@ -55,7 +55,7 @@ export const AboutSection: React.FC = () => {
             <div
               className="h-full min-h-[340px] w-full bg-cover bg-center transition-transform duration-700 hover:scale-[1.03] lg:min-h-[440px]"
               style={{
-                backgroundImage: `url('${uniportImage}')`
+                backgroundImage: `url('${uniportImage.src}')`
               }}
             ></div>
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#131b2e]/95 via-[#131b2e]/60 to-transparent p-4 text-white sm:p-5">
