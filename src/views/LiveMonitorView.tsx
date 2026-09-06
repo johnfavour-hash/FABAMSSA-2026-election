@@ -13,7 +13,6 @@ import {
   CheckCircle2, 
   Info,
   Activity,
-  Printer,
   Sparkles,
   Search,
   Filter
@@ -238,23 +237,6 @@ export const LiveMonitorView: React.FC<LiveMonitorViewProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                className="flex items-center gap-2 rounded-lg border border-[#c2c6d5] bg-white px-4 py-2 text-sm font-semibold text-[#131b2e] hover:bg-[#f2f3ff]"
-              >
-                <span className="material-symbols-outlined text-[18px]">download</span>
-                Download Results
-              </button>
-              <button
-                type="button"
-                onClick={() => window.print()}
-                className="flex items-center gap-2 rounded-lg border border-[#c2c6d5] bg-white px-4 py-2 text-sm font-semibold text-[#131b2e] hover:bg-[#f2f3ff]"
-              >
-                <span className="material-symbols-outlined text-[18px]">print</span>
-                Print Results
-              </button>
-            </div>
           </div>
         </header>
 
