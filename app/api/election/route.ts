@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '../../../lib/supabase/admin';
+import { readAdminSession } from '../../../lib/admin-session';
 
 export const dynamic = 'force-dynamic';
 
@@ -43,10 +44,11 @@ type PublicVoterRow = {
   has_voted: boolean | number;
 };
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const supabase = getSupabaseAdmin();
-    const [stateResult, candidatesResult, positionsResult, votersResult, statsResult, membersResult] = await Promise.all([
+    const isAdmin = Boolean(readAdminSession(request.headers.get('X-Admin-Session') || ''));
+    const [stateResult, candidatesResult, positionsResult, votersResult, statsResult, membersResult, auditResult] = await Promise.all([
       supabase
         .from('election_state')
         .select('status, start_time, end_time, duration_minutes, results_status, published_at, published_by, certified_at, certified_by, updated_at')
@@ -54,9 +56,14 @@ export async function GET() {
         .single(),
       supabase.from('candidates').select('*').order('id'),
       supabase.from('positions').select('id, title, description, order_index, max_selections').order('order_index'),
-      supabase.from('voters').select(publicVoterFields).order('full_name'),
+      isAdmin
+        ? supabase.from('voters').select('*').order('full_name')
+        : supabase.from('voters').select(publicVoterFields).order('full_name'),
       supabase.from('department_stats').select('*').order('department'),
       supabase.from('commission_members').select('id, initials, name, role').order('order_index').order('name'),
+      isAdmin
+        ? supabase.from('audit_logs').select('*').order('timestamp', { ascending: false }).limit(100)
+        : Promise.resolve({ data: [], error: null }),
     ]);
 
     const failedResult = [stateResult, candidatesResult, positionsResult, votersResult, statsResult, membersResult]
@@ -104,7 +111,7 @@ export async function GET() {
       candidates: candidatesResult.data ?? [],
       positions: positionsResult.data ?? [],
       voters: votersResult.data ?? [],
-      audit_logs: [],
+      audit_logs: isAdmin ? (auditResult.data ?? []) : [],
       department_stats: Object.keys(departmentStats).length ? departmentStats : storedDepartmentStats,
       commission_members: membersResult.data ?? [],
     }, { headers: { 'Cache-Control': 'no-store' } });
