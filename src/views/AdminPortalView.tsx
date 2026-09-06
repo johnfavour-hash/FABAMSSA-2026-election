@@ -110,12 +110,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
     resetElectionData,
   } = useElection();
 
-  const configuredApiBase = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/+$/, '');
-  const API_BASE = configuredApiBase
-    ? (configuredApiBase.endsWith('/api')
-      ? configuredApiBase
-      : `${configuredApiBase.replace(/\/election$/, '')}/api`)
-    : '/api';
+  const API_BASE = '/api';
   const [activeTab, setActiveTab] = useState<AdminTab>('verification');
   const [voterSearch, setVoterSearch] = useState('');
   const [voterDeptFilter, setVoterDeptFilter] = useState<string>('ALL');

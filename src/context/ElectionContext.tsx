@@ -61,12 +61,7 @@ interface ElectionContextType {
 
 const ElectionContext = createContext<ElectionContextType | undefined>(undefined);
 
-const configuredApiBase = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/+$/, '');
-const API_BASE = configuredApiBase
-  ? (configuredApiBase.endsWith('/api')
-    ? configuredApiBase
-    : `${configuredApiBase.replace(/\/election$/, '')}/api`)
-  : '/api';
+const API_BASE = '/api';
 
 const STORAGE_KEYS = {
   STATUS: 'bamssa_election_status_2026',
