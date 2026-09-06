@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '../../../../lib/supabase/admin';
 import { readAdminSession } from '../../../../lib/admin-session';
+import { writeAuditLog } from '../../../../lib/audit-log';
 
 export const dynamic = 'force-dynamic';
 
@@ -33,6 +34,7 @@ export async function POST(request: Request) {
     if (updateResult.error) {
       return NextResponse.json({ success: false, message: 'Voter rejection could not be saved.' }, { status: 503 });
     }
+    await writeAuditLog('Student Verification Rejected', 'ELECO Accreditation Officer', 'ACCREDITATION', `Matric: ${matricNumber} rejected. Reason: ${reason}`);
 
     return NextResponse.json({ success: true, message: 'Voter submission marked as rejected.', reason }, { headers: { 'Cache-Control': 'no-store' } });
   } catch {

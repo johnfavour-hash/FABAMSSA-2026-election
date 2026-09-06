@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '../../../../lib/supabase/admin';
+import { writeAuditLog } from '../../../../lib/audit-log';
 
 export const dynamic = 'force-dynamic';
 
@@ -80,6 +81,7 @@ export async function POST(request: Request) {
         voted: stats.voted,
       } as never).eq('department', payload.department);
     }
+    await writeAuditLog('New student voter registration submitted', 'Registry System', 'ACCREDITATION', `Matriculation ${matricNumber} submitted for eligibility review.`);
 
     return NextResponse.json({ success: true, message: 'Voter registration submitted successfully. Awaiting admin approval.' }, { headers: { 'Cache-Control': 'no-store' } });
   } catch {

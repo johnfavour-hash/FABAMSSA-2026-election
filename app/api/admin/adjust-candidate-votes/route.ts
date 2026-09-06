@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '../../../../lib/supabase/admin';
 import { readAdminSession } from '../../../../lib/admin-session';
+import { writeAuditLog } from '../../../../lib/audit-log';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,6 +19,7 @@ export async function POST(request: Request) {
     const votesCount = Math.max(0, Math.trunc(row.votes_count + delta));
     const result = await supabase.from('candidates').update({ votes_count: votesCount } as never).eq('id', candidateId);
     if (result.error) return NextResponse.json({ success: false, message: 'Vote count could not be adjusted.' }, { status: 503 });
+    await writeAuditLog('Candidate vote count adjusted', 'ELECO Administrator', 'ADMIN', `Candidate ${candidateId} changed by ${delta}. New total: ${votesCount}.`);
     return NextResponse.json({ success: true, candidateId, votesCount });
   } catch { return NextResponse.json({ success: false, message: 'Vote adjustment is unavailable.' }, { status: 503 }); }
 }

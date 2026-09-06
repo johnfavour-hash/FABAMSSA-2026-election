@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '../../../../lib/supabase/admin';
 import { readAdminSession } from '../../../../lib/admin-session';
+import { writeAuditLog } from '../../../../lib/audit-log';
 
 export async function POST(request: Request) {
   try {
@@ -17,6 +18,7 @@ export async function POST(request: Request) {
     const now = new Date().toISOString();
     const state = await supabase.from('election_state').update({ status: 'STANDBY', start_time: null, end_time: null, results_status: 'DRAFT', published_at: null, published_by: null, certified_at: null, certified_by: null, updated_at: now } as never).eq('id', 1);
     if (state.error) return NextResponse.json({ success: false, message: 'Election state could not be reset.' }, { status: 503 });
+    await writeAuditLog('Election reset to clean state', 'System Admin', 'SYSTEM', 'All records removed; election is ready for fresh configuration.');
     return NextResponse.json({ success: true, message: 'Election reset successfully to a clean state.' });
   } catch { return NextResponse.json({ success: false, message: 'Election reset is unavailable.' }, { status: 503 }); }
 }

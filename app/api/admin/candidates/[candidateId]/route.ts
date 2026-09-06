@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '../../../../../lib/supabase/admin';
 import { readAdminSession } from '../../../../../lib/admin-session';
+import { writeAuditLog } from '../../../../../lib/audit-log';
 
 export async function DELETE(request: Request, context: { params: Promise<{ candidateId: string }> }) {
   try {
@@ -11,6 +12,7 @@ export async function DELETE(request: Request, context: { params: Promise<{ cand
     if (existing.error || !existing.data) return NextResponse.json({ success: false, message: 'Candidate not found.' }, { status: 404 });
     const result = await supabase.from('candidates').delete().eq('id', candidateId);
     if (result.error) return NextResponse.json({ success: false, message: 'Candidate could not be deleted.' }, { status: 503 });
+    await writeAuditLog('Candidate deleted', 'ELECO Administrator', 'ADMIN', `Candidate removed: ${candidateId}.`);
     return NextResponse.json({ success: true, candidateId });
   } catch { return NextResponse.json({ success: false, message: 'Candidate deletion is unavailable.' }, { status: 503 }); }
 }

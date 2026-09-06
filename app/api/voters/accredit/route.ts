@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '../../../../lib/supabase/admin';
 import { readAdminSession } from '../../../../lib/admin-session';
+import { writeAuditLog } from '../../../../lib/audit-log';
 
 export const dynamic = 'force-dynamic';
 
@@ -76,6 +77,7 @@ export async function POST(request: Request) {
         accredited: stats.accredited + 1,
       } as never).eq('department', voter.department);
     }
+    await writeAuditLog('Student Voter Accredited', 'ELECO Registry', 'ACCREDITATION', `Biometric PIN generated for Matric: ${matricNumber}`);
 
     return NextResponse.json({ success: true, message: 'Accreditation verified successfully.', pin, accreditationTime }, { headers: { 'Cache-Control': 'no-store' } });
   } catch {

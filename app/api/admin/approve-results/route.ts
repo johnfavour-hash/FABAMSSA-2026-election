@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '../../../../lib/supabase/admin';
 import { readAdminSession } from '../../../../lib/admin-session';
+import { writeAuditLog } from '../../../../lib/audit-log';
 
 export async function POST(request: Request) {
   try {
@@ -17,6 +18,7 @@ export async function POST(request: Request) {
     const now = new Date().toISOString();
     const result = await supabase.from('election_state').update({ status: 'CERTIFIED', results_status: 'CERTIFIED', certified_at: now, certified_by: 'ELECO Administrator', updated_at: now } as never).eq('id', 1);
     if (result.error) return NextResponse.json({ success: false, message: 'Results could not be certified.' }, { status: 503 });
+    await writeAuditLog('Results approved and certified', 'ELECO Administrator', 'ADMIN', 'Official results sent to all stakeholders.');
     return NextResponse.json({ success: true, status: 'CERTIFIED' });
   } catch { return NextResponse.json({ success: false, message: 'Results certification is unavailable.' }, { status: 503 }); }
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '../../../../lib/supabase/admin';
 import { readAdminSession } from '../../../../lib/admin-session';
+import { writeAuditLog } from '../../../../lib/audit-log';
 
 export async function POST(request: Request) {
   try {
@@ -19,6 +20,7 @@ export async function POST(request: Request) {
     const now = new Date().toISOString();
     const result = await supabase.from('election_state').update({ results_status: 'PUBLISHED', published_at: now, published_by: 'ELECO Administrator', updated_at: now } as never).eq('id', 1);
     if (result.error) return NextResponse.json({ success: false, message: 'Results could not be published.' }, { status: 503 });
+    await writeAuditLog('Results published', 'ELECO Administrator', 'ADMIN', 'Aggregated results are now visible to students.');
     return NextResponse.json({ success: true, resultsStatus: 'PUBLISHED', publishedAt: now });
   } catch { return NextResponse.json({ success: false, message: 'Results publishing is unavailable.' }, { status: 503 }); }
 }

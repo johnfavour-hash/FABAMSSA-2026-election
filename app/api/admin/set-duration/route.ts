@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '../../../../lib/supabase/admin';
 import { readAdminSession } from '../../../../lib/admin-session';
+import { writeAuditLog } from '../../../../lib/audit-log';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,6 +33,7 @@ export async function POST(request: Request) {
     if (updateResult.error) {
       return NextResponse.json({ success: false, message: 'Election duration could not be saved.' }, { status: 503 });
     }
+    await writeAuditLog('Election duration changed', 'ELECO Administrator', 'ADMIN', `Election duration set to ${duration} minutes.`);
     return NextResponse.json({ success: true, durationMinutes: duration }, { headers: { 'Cache-Control': 'no-store' } });
   } catch {
     return NextResponse.json({ success: false, message: 'Election duration update is unavailable.' }, { status: 503 });

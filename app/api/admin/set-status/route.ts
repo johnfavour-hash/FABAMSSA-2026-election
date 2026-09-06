@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '../../../../lib/supabase/admin';
 import { readAdminSession } from '../../../../lib/admin-session';
+import { writeAuditLog } from '../../../../lib/audit-log';
 
 export const dynamic = 'force-dynamic';
 
@@ -43,6 +44,7 @@ export async function POST(request: Request) {
     if (updateResult.error) {
       return NextResponse.json({ success: false, message: 'Election status could not be saved.' }, { status: 503 });
     }
+    await writeAuditLog(`Election status set to ${requested}`, 'ELECO Administrator', 'ADMIN', `Admin changed election state to ${requested}.`);
 
     return NextResponse.json({
       success: true,

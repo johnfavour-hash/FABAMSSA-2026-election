@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '../../../../lib/supabase/admin';
 import { readAdminSession } from '../../../../lib/admin-session';
+import { writeAuditLog } from '../../../../lib/audit-log';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,6 +24,7 @@ export async function POST(request: Request) {
     };
     const result = await supabase.from('candidates').insert(candidate as never);
     if (result.error) return NextResponse.json({ success: false, message: 'Candidate could not be created.' }, { status: 503 });
+    await writeAuditLog('Candidate created', 'ELECO Administrator', 'ADMIN', `Candidate registered: ${candidate.full_name} for ${candidate.position_id}.`);
     return NextResponse.json({ success: true, candidate: { id: candidate.id, positionId: candidate.position_id, fullName: candidate.full_name, votesCount: 0, approvedByEleco: true } });
   } catch { return NextResponse.json({ success: false, message: 'Candidate creation is unavailable.' }, { status: 503 }); }
 }

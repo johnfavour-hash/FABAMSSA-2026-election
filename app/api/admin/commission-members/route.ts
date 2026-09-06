@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '../../../../lib/supabase/admin';
 import { readAdminSession } from '../../../../lib/admin-session';
+import { writeAuditLog } from '../../../../lib/audit-log';
 
 export async function POST(request: Request) {
   try {
@@ -14,6 +15,7 @@ export async function POST(request: Request) {
     if (clear.error) return NextResponse.json({ success: false, message: 'Commission roster could not be cleared.' }, { status: 503 });
     const result = await supabase.from('commission_members').insert(normalized as never);
     if (result.error) return NextResponse.json({ success: false, message: 'Commission roster could not be saved.' }, { status: 503 });
+    await writeAuditLog('Electoral Commission roster updated', 'ELECO Administrator', 'ADMIN', `${normalized.length} commission members configured.`);
     return NextResponse.json({ success: true, commissionMembers: normalized.map(({ id, initials, name, role }) => ({ id, initials, name, role })) });
   } catch { return NextResponse.json({ success: false, message: 'Commission roster is unavailable.' }, { status: 503 }); }
 }
