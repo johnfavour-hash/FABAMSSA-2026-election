@@ -33,7 +33,17 @@ export async function POST(request: Request) {
 
     const result = data as BallotResult | null;
     if (!result?.success) {
-      return NextResponse.json(result || { success: false, message: 'Ballot submission rejected.' }, { status: 403 });
+      const message = result?.message || 'Ballot submission rejected.';
+      const status = message.includes('already cast')
+        ? 409
+        : message.includes('not currently open') || message.includes('window has closed')
+          ? 409
+          : message.includes('invalid selection')
+            ? 400
+            : message.includes('not found')
+              ? 404
+              : 403;
+      return NextResponse.json({ success: false, message }, { status });
     }
 
     return NextResponse.json(result, { headers: { 'Cache-Control': 'no-store' } });
