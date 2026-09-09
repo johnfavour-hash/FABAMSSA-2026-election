@@ -13,7 +13,9 @@ import {
   UserCheck, 
   AlertCircle,
   ShieldCheck,
-  Check
+  Check,
+  Copy,
+  KeyRound
 } from 'lucide-react';
 
 interface EligibilityViewProps {
@@ -30,6 +32,7 @@ export const EligibilityView: React.FC<EligibilityViewProps> = ({
   const [searchedVoter, setSearchedVoter] = useState<Voter | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
   const [errorStatus, setErrorStatus] = useState<string | null>(null);
+  const [copiedPin, setCopiedPin] = useState(false);
 
   const maskName = (name: string) => {
     const parts = name.split(' ');
@@ -167,9 +170,49 @@ export const EligibilityView: React.FC<EligibilityViewProps> = ({
                 </div>
 
                 {searchedVoter.isAccredited && searchedVoter.voterPin && (
-                  <div className="bg-white rounded-xl p-4 border border-green-200 mb-6">
-                    <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Official 4-Digit PIN</p>
-                    <div className="text-3xl font-black tracking-[0.35em] text-[#003f93]">{searchedVoter.voterPin}</div>
+                  <div className="bg-white rounded-2xl p-5 border-2 border-emerald-300 shadow-sm mb-6 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-emerald-800">
+                        <KeyRound className="w-5 h-5 text-emerald-600" />
+                        <span className="text-xs font-bold uppercase tracking-wider">Your Official Voting PIN</span>
+                      </div>
+                      <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                        Accredited
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                      <div>
+                        <div className="text-3xl sm:text-4xl font-mono font-black tracking-[0.35em] text-[#003f93]">
+                          {searchedVoter.voterPin}
+                        </div>
+                        <p className="text-[11px] text-slate-500 mt-1">Use this 4-digit PIN along with your matric number to log in and vote.</p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (searchedVoter.voterPin) {
+                            navigator.clipboard.writeText(searchedVoter.voterPin);
+                            setCopiedPin(true);
+                            setTimeout(() => setCopiedPin(false), 2500);
+                          }
+                        }}
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 shadow-2xs transition-colors cursor-pointer shrink-0"
+                      >
+                        {copiedPin ? (
+                          <>
+                            <Check className="w-4 h-4 text-emerald-600" />
+                            <span className="text-emerald-700">Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-4 h-4 text-slate-600" />
+                            <span>Copy PIN</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 )}
 

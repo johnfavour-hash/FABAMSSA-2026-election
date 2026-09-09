@@ -13,8 +13,14 @@ const publicVoterFields = [
   'is_eligible',
   'is_accredited',
   'has_voted',
+  'voter_pin',
   'verification_status',
   'registered_at',
+  'rejection_reason',
+  'accreditation_time',
+  'avatar_url',
+  'id_card_url',
+  'review_notes',
 ].join(',');
 
 type ElectionStateRow = {
