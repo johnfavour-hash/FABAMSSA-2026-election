@@ -132,6 +132,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
   const [savingCommissionMembers, setSavingCommissionMembers] = useState(false);
   const [commissionMembersDirty, setCommissionMembersDirty] = useState(false);
   const [showResetConfirmation, setShowResetConfirmation] = useState(false);
+  const [settingsTab, setSettingsTab] = useState<'profile' | 'election' | 'commission' | 'security' | 'danger'>('profile');
 
   useEffect(() => {
     setProfileName(adminName);
@@ -3263,201 +3264,452 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
 
           {/* TAB 10: SETTINGS / ELECTION SETUP */}
           {activeTab === 'settings' && (
-            <div className="w-full max-w-[1280px] mx-auto pb-10">
-              <header className="flex items-center justify-between py-4 px-2 border-b border-[#c9d2ef] bg-transparent">
-                <div className="text-[#1f3f7a] text-3xl sm:text-4xl font-extrabold tracking-tight">Admin Settings</div>
-
-                <div className="flex items-center gap-4">
-                  <div className="hidden md:flex items-center gap-2 bg-[#eef2ff] border border-[#c7d4f7] rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-[#3d4f68]">
-                    <span className="w-2 h-2 rounded-full bg-[#5d6f8d] inline-block" />
-                    Standby
-                  </div>
-                  <button type="button" className="flex items-center justify-center w-10 h-10 rounded-full bg-transparent text-[#3d4f68] hover:bg-[#eef2ff] transition-colors cursor-pointer" aria-label="Notifications">
-                    <Bell className="w-5 h-5" />
-                  </button>
-                  <button type="button" onClick={onOpenGuide} className="flex items-center justify-center w-10 h-10 rounded-full bg-transparent text-[#3d4f68] hover:bg-[#eef2ff] transition-colors cursor-pointer" aria-label="Open admin guide">
-                    <HelpCircle className="w-5 h-5" />
-                  </button>
-                  <div className="w-10 h-10 rounded-full overflow-hidden border border-[#c7d4f7] bg-[#dfe8ff]">
-                    <img
-                      src={adminAvatarUrl || '/assets/nreerety-removebg-preview.png'}
-                      alt="Admin profile"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
+            <div className="w-full max-w-[1280px] mx-auto space-y-6 pb-12">
+              {/* Header Title */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-[#e2e8f0]">
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-extrabold text-[#131b2e] tracking-tight">
+                    Admin Settings
+                  </h1>
+                  <p className="text-sm text-[#424653] mt-1">
+                    Manage election parameters, administrator identity, commission officers, and system controls.
+                  </p>
                 </div>
-              </header>
-
-              <div className="mt-8 bg-[#dfe6ff] rounded-[22px] border border-[#c7d4f7] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.2)] p-5 sm:p-6">
-                <div className="mb-8">
-                  <h2 className="text-4xl sm:text-5xl font-extrabold text-[#1b2d4d] tracking-tight">Admin Settings</h2>
-                  <p className="mt-2 text-lg text-[#4a5a73]">Manage your administrator account, preferences, notifications, and access settings.</p>
+                <div className="flex items-center gap-2 self-start sm:self-auto">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#f1f5f9] text-[#475569] border border-[#e2e8f0]">
+                    <span className={`w-2 h-2 rounded-full ${status === 'LIVE' ? 'bg-[#ba1a1a] animate-pulse' : 'bg-[#475569]'}`} />
+                    System {status === 'LIVE' ? 'Live' : status}
+                  </span>
                 </div>
+              </div>
 
-                <div className="flex flex-col lg:flex-row gap-8 lg:gap-10">
-                  <aside className="w-full lg:w-[260px] flex-shrink-0">
-                    <nav className="flex flex-col gap-2 pt-1">
-                      {[
-                        { label: 'Profile', icon: User, active: true },
-                        { label: 'Security', icon: ShieldCheck },
-                        { label: 'Notifications', icon: Bell },
-                        { label: 'Admin Preferences', icon: Settings },
-                        { label: 'System Information', icon: Info }
-                      ].map(({ label, icon: Icon, active }) => (
+              {/* Main Settings Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                {/* Navigation Sidebar */}
+                <aside className="lg:col-span-4 xl:col-span-3">
+                  <div className="bg-white rounded-2xl border border-[#e2e8f0] p-3 shadow-xs space-y-1">
+                    {[
+                      { id: 'profile' as const, label: 'Profile & Account', icon: User, desc: 'Admin identity & avatar' },
+                      { id: 'election' as const, label: 'Election Controls', icon: Sliders, desc: 'Timing & start/stop voting' },
+                      { id: 'commission' as const, label: 'Electoral Commission', icon: Users, desc: 'ELECO member roster' },
+                      { id: 'security' as const, label: 'Security & Access', icon: ShieldCheck, desc: 'Active session & clearance' },
+                      { id: 'danger' as const, label: 'Danger Zone', icon: AlertTriangle, desc: 'Reset election database' },
+                    ].map(({ id, label, icon: Icon, desc }) => {
+                      const isActive = settingsTab === id;
+                      const isDanger = id === 'danger';
+                      return (
                         <button
-                          key={label}
+                          key={id}
                           type="button"
-                          className={`group flex items-center justify-between w-full rounded-xl border px-4 py-3 text-left transition-all ${
-                            active
-                              ? 'bg-white border-[#c9d2ef] text-[#1b2d4d] shadow-sm'
-                              : 'border-transparent text-[#46576f] hover:bg-white hover:border-[#c9d2ef]'
+                          onClick={() => setSettingsTab(id)}
+                          className={`w-full text-left p-3.5 rounded-xl transition-all flex items-center justify-between group cursor-pointer ${
+                            isActive
+                              ? isDanger
+                                ? 'bg-[#fff1f2] border border-[#fecdd3] text-[#9f1239]'
+                                : 'bg-[#eff6ff] border border-[#bfdbfe] text-[#1e40af] shadow-xs'
+                              : isDanger
+                                ? 'hover:bg-[#fff1f2] text-[#991b1b]'
+                                : 'hover:bg-[#f8fafc] text-[#334155]'
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            <Icon className={`w-5 h-5 ${active ? 'text-[#0b59c6]' : 'text-[#445872]'}`} />
-                            <span className="text-base font-medium">{label}</span>
+                            <div className={`p-2 rounded-lg ${
+                              isActive
+                                ? isDanger ? 'bg-[#ffe4e6] text-[#be123c]' : 'bg-[#dbeafe] text-[#1d4ed8]'
+                                : isDanger ? 'bg-[#fee2e2] text-[#dc2626]' : 'bg-[#f1f5f9] text-[#64748b] group-hover:bg-[#e2e8f0]'
+                            }`}>
+                              <Icon className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <div className={`text-sm font-bold ${isActive ? (isDanger ? 'text-[#9f1239]' : 'text-[#1e40af]') : (isDanger ? 'text-[#991b1b]' : 'text-[#0f172a]')}`}>
+                                {label}
+                              </div>
+                              <div className="text-[11px] text-[#64748b]">{desc}</div>
+                            </div>
                           </div>
-                          <ChevronRight className={`w-4 h-4 transition-opacity ${active ? 'opacity-100 text-[#0b59c6]' : 'opacity-0 group-hover:opacity-100 text-[#445872]'}`} />
+                          <ChevronRight className={`w-4 h-4 transition-transform ${isActive ? 'translate-x-0.5 opacity-100' : 'opacity-0 group-hover:opacity-60'}`} />
                         </button>
-                      ))}
-                    </nav>
-                  </aside>
+                      );
+                    })}
+                  </div>
 
-                  <section className="flex-1 bg-white rounded-[20px] border border-[#d5dcee] shadow-sm p-5 sm:p-6">
-                    <h3 className="text-[22px] font-bold text-[#1c2945] pb-4 border-b border-[#e7ebf7]">Profile Information</h3>
-
-                    <div className="mt-6 rounded-xl border border-[#d5dcee] bg-[#f7f9ff] p-4">
-                      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                        <div>
-                          <h4 className="text-base font-bold text-[#1c2945]">Election Controls</h4>
-                          <p className="mt-1 text-sm text-[#4a5a73]">Choose the voting time, then start or stop the election.</p>
-                        </div>
-                        <div className="flex flex-wrap items-end gap-3">
-                          <label className="text-xs font-bold text-[#4a5a73]">
-                            Voting time
-                            <select value={durationMinutes} disabled={status === 'LIVE'} onChange={async (event) => {
-                              const result = await setElectionDuration(Number(event.target.value));
-                              if (!result.success) showToast(result.message || 'Unable to change voting time.', 'error');
-                            }} className="mt-1 block rounded-lg border border-[#c2c6d5] bg-white px-3 py-2 text-sm text-[#131b2e] disabled:cursor-not-allowed disabled:opacity-50">
-                              <option value={120}>2 hours</option>
-                              <option value={150}>2 hours 30 minutes</option>
-                            </select>
-                          </label>
-                          <button type="button" onClick={() => handleStatusChange(status === 'LIVE' ? 'CLOSED' : 'LIVE')} disabled={status === 'CERTIFIED'} className={`rounded-lg px-4 py-2 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-50 ${status === 'LIVE' ? 'bg-[#ba1a1a] hover:bg-[#93000a]' : 'bg-[#0055c2] hover:bg-[#003f93]'}`}>
-                            {status === 'LIVE' ? 'Stop Election' : 'Start Election'}
-                          </button>
-                        </div>
-                      </div>
-                      {status === 'LIVE' && <p className="mt-3 text-sm font-semibold text-[#93000a]">Time left: {remainingTime}</p>}
+                  {/* Quick Stat Pill in Sidebar */}
+                  <div className="mt-4 bg-[#f8fafc] rounded-xl border border-[#e2e8f0] p-4 text-xs text-[#64748b] space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-[#334155]">Portal Version</span>
+                      <span className="font-mono font-bold text-[#003f93]">v2026.1-STABLE</span>
                     </div>
-
-                    <div className="mt-6 rounded-xl border border-[#fecaca] bg-[#fff7f7] p-4">
-                      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                          <h4 className="text-base font-bold text-[#991b1b]">Danger Zone</h4>
-                          <p className="mt-1 text-sm text-[#7f1d1d]">Reset the election only when you are ready to remove all election records.</p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => setShowResetConfirmation(true)}
-                          className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#dc2626] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[#b91c1c]"
-                        >
-                          <AlertTriangle className="h-4 w-4" />
-                          Reset Election
-                        </button>
-                      </div>
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-[#334155]">Authorization</span>
+                      <span className="text-[#0284c7] font-semibold">ELECO Level 1</span>
                     </div>
+                  </div>
+                </aside>
 
-                    <div className="mt-6 flex flex-col md:flex-row gap-8 md:items-start">
-                      <div className="flex justify-center md:justify-start">
-                        <div className="relative w-32 h-32 rounded-full overflow-hidden border-[3px] border-[#dfe8ff] bg-[#e7ebff]">
-                          <img
-                            src={profileAvatar || '/assets/nreerety-removebg-preview.png'}
-                            alt="Admin profile"
-                            className="w-full h-full object-cover"
-                          />
+                {/* Tab Content Panels */}
+                <section className="lg:col-span-8 xl:col-span-9 space-y-6">
+                  
+                  {/* TAB: PROFILE & ACCOUNT */}
+                  {settingsTab === 'profile' && (
+                    <div className="bg-white rounded-2xl border border-[#e2e8f0] shadow-xs overflow-hidden">
+                      <div className="p-6 border-b border-[#f1f5f9] flex items-center justify-between">
+                        <div>
+                          <h2 className="text-lg font-bold text-[#0f172a]">Administrator Profile</h2>
+                          <p className="text-xs text-[#64748b] mt-0.5">Manage your identity details and portal photo</p>
                         </div>
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#dcfce7] text-[#15803d] border border-[#bbf7d0] px-3 py-1 text-xs font-bold">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#16a34a]" />
+                          Active Session
+                        </span>
                       </div>
 
-                      <div className="flex-1 space-y-5">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="p-6 space-y-6">
+                        {/* Profile Photo Area */}
+                        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 p-4 rounded-xl bg-[#f8fafc] border border-[#e2e8f0]">
+                          <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow-md bg-[#e2e8f0] shrink-0">
+                            <img
+                              src={profileAvatar || '/assets/nreerety-removebg-preview.png'}
+                              alt="Admin avatar"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="flex-1 text-center sm:text-left space-y-1.5">
+                            <div className="font-bold text-base text-[#0f172a]">{profileName || adminName}</div>
+                            <p className="text-xs text-[#64748b]">Upload a clear photo for administrative logs and receipts.</p>
+                            {isEditingProfile && (
+                              <div className="pt-1">
+                                <label className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#cbd5e1] bg-white text-xs font-semibold text-[#334155] hover:bg-[#f1f5f9] cursor-pointer shadow-2xs">
+                                  <User className="w-3.5 h-3.5" />
+                                  <span>Choose File</span>
+                                  <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleProfileImage} className="hidden" />
+                                </label>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Input Grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-[11px] font-bold uppercase tracking-[0.12em] text-[#4a5a73] mb-2">Full Name</label>
-                            <div className="rounded-xl border border-[#d5dcee] bg-[#f8faff] px-4 py-3 text-base font-medium text-[#1c2945] min-h-[48px] flex items-center">
-                              {adminName}
+                            <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider mb-1.5">Display Name</label>
+                            <input
+                              type="text"
+                              value={profileName}
+                              disabled={!isEditingProfile}
+                              onChange={(e) => setProfileName(e.target.value)}
+                              className="w-full rounded-xl border border-[#cbd5e1] bg-white px-4 py-2.5 text-sm font-medium text-[#0f172a] outline-hidden focus:border-[#0055c2] focus:ring-2 focus:ring-[#bfdbfe] disabled:bg-[#f8fafc] disabled:text-[#64748b] disabled:cursor-not-allowed"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider mb-1.5">Email Address</label>
+                            <div className="w-full rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-4 py-2.5 text-sm font-medium text-[#64748b] flex items-center justify-between">
+                              <span>{adminEmail || 'admin@fabamssa.unilorin.edu.ng'}</span>
+                              <Lock className="w-3.5 h-3.5 text-[#94a3b8]" />
                             </div>
                           </div>
 
                           <div>
-                            <label className="block text-[11px] font-bold uppercase tracking-[0.12em] text-[#4a5a73] mb-2">Email Address</label>
-                            <div className="rounded-xl border border-[#d5dcee] bg-[#f8faff] px-4 py-3 text-base font-medium text-[#1c2945] min-h-[48px] flex items-center">
-                              {adminEmail || 'Managed by the Electoral Commission'}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-[11px] font-bold uppercase tracking-[0.12em] text-[#4a5a73] mb-2">Role</label>
-                            <div className="rounded-xl border border-[#d5dcee] bg-[#eef2ff] px-4 py-3 text-base font-medium text-[#1c2945] min-h-[48px] flex items-center justify-between gap-3 opacity-90">
-                              <span>Election Administrator</span>
-                              <Lock className="w-4 h-4 text-[#5d6f8d]" />
+                            <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider mb-1.5">Assigned Role</label>
+                            <div className="w-full rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-4 py-2.5 text-sm font-medium text-[#64748b] flex items-center justify-between">
+                              <span>Electoral Commission Administrator</span>
+                              <ShieldCheck className="w-4 h-4 text-[#0055c2]" />
                             </div>
                           </div>
 
                           <div>
-                            <label className="block text-[11px] font-bold uppercase tracking-[0.12em] text-[#4a5a73] mb-2">Status</label>
-                            <div className="mt-2 flex items-center gap-2">
-                              <span className="inline-flex items-center gap-2 rounded-full bg-[#dbeafe] text-[#1e40af] border border-[#bfdbfe] px-3 py-1 text-[12px] font-bold">
-                                <span className="w-2 h-2 rounded-full bg-[#1e40af]" />
-                                Active
-                              </span>
+                            <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider mb-1.5">System Clearance</label>
+                            <div className="w-full rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-4 py-2.5 text-sm font-medium text-[#64748b] flex items-center justify-between">
+                              <span>ELECO Tier-1 Root Access</span>
+                              <CheckCircle2 className="w-4 h-4 text-[#16a34a]" />
                             </div>
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                          <label className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#4a5a73]">
-                            Display Name
-                            <input value={profileName} disabled={!isEditingProfile} onChange={(event) => setProfileName(event.target.value)} className="mt-2 w-full rounded-xl border border-[#d5dcee] bg-white px-4 py-3 text-base font-medium normal-case tracking-normal text-[#1c2945] outline-none focus:border-[#0b59c6] disabled:bg-[#f8faff] disabled:cursor-not-allowed" />
-                          </label>
-                          <label className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#4a5a73]">
-                            Profile Picture
-                            <input type="file" accept="image/jpeg,image/png,image/webp" disabled={!isEditingProfile} onChange={handleProfileImage} className="mt-2 block w-full rounded-xl border border-[#d5dcee] bg-white px-3 py-2 text-xs normal-case tracking-normal text-[#1c2945] disabled:bg-[#f8faff] disabled:cursor-not-allowed" />
-                          </label>
+                        {/* Notice Card */}
+                        <div className="flex items-start gap-3 rounded-xl border border-[#bfdbfe] bg-[#eff6ff] p-4 text-[#1e40af]">
+                          <Info className="w-4 h-4 mt-0.5 shrink-0" />
+                          <p className="text-xs leading-relaxed">
+                            Profile updates are reflected immediately across administrative timestamps and ELECO election receipts.
+                          </p>
                         </div>
 
-                        <div className="flex items-start gap-3 rounded-xl border border-[#d5dcee] bg-[#f7f9ff] px-4 py-3 text-[#4a5a73]">
-                          <Info className="w-5 h-5 mt-0.5 text-[#0b59c6] shrink-0" />
-                          <p className="text-sm leading-relaxed">Your name and picture are shown only in the administrator portal.</p>
-                        </div>
-
-                        <div className="flex justify-end pt-2">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (isEditingProfile) {
-                                void saveProfile();
-                              } else {
-                                setIsEditingProfile(true);
-                              }
-                            }}
-                            disabled={savingProfile || (isEditingProfile && !profileName.trim())}
-                            className="inline-flex items-center gap-2 rounded-xl bg-[#0b59c6] hover:bg-[#0a4ea8] text-white px-5 py-3 text-sm font-bold shadow-sm transition-colors cursor-pointer"
-                          >
-                            <Settings className="w-4 h-4" />
-                            {savingProfile ? 'Saving...' : isEditingProfile ? 'Save Profile' : 'Edit Profile'}
-                          </button>
-                          {isEditingProfile && !savingProfile && (
-                            <button type="button" onClick={() => { setProfileName(adminName); setProfileAvatar(adminAvatarUrl); setIsEditingProfile(false); }} className="inline-flex items-center gap-2 rounded-xl border border-[#c2c6d5] bg-white px-5 py-3 text-sm font-bold text-[#1c2945] shadow-sm transition-colors hover:bg-[#f8faff]">
-                              Cancel
+                        {/* Action Buttons */}
+                        <div className="flex items-center justify-end gap-3 pt-2">
+                          {isEditingProfile ? (
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setProfileName(adminName);
+                                  setProfileAvatar(adminAvatarUrl);
+                                  setIsEditingProfile(false);
+                                }}
+                                className="px-4 py-2.5 rounded-xl border border-[#cbd5e1] text-xs font-bold text-[#475569] hover:bg-[#f8fafc] transition-colors cursor-pointer"
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => void saveProfile()}
+                                disabled={savingProfile || !profileName.trim()}
+                                className="px-5 py-2.5 rounded-xl bg-[#0055c2] hover:bg-[#003f93] text-white text-xs font-bold shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+                              >
+                                {savingProfile ? 'Saving...' : 'Save Profile'}
+                              </button>
+                            </>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setIsEditingProfile(true)}
+                              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0055c2] hover:bg-[#003f93] text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                              Edit Profile
                             </button>
                           )}
                         </div>
                       </div>
                     </div>
-                  </section>
-                </div>
+                  )}
+
+                  {/* TAB: ELECTION CONTROLS */}
+                  {settingsTab === 'election' && (
+                    <div className="space-y-6">
+                      <div className="bg-white rounded-2xl border border-[#e2e8f0] shadow-xs p-6 space-y-6">
+                        <div className="flex items-center justify-between border-b border-[#f1f5f9] pb-4">
+                          <div>
+                            <h2 className="text-lg font-bold text-[#0f172a]">Election Lifecycle & Controls</h2>
+                            <p className="text-xs text-[#64748b] mt-0.5">Configure voting window, duration, and status toggle</p>
+                          </div>
+                          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f1f5f9] border border-[#e2e8f0]">
+                            <span className={`w-2 h-2 rounded-full ${status === 'LIVE' ? 'bg-[#ba1a1a] animate-pulse' : 'bg-[#64748b]'}`} />
+                            <span className="text-xs font-bold uppercase tracking-wider text-[#334155]">{status}</span>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-4">
+                            <div>
+                              <label className="block text-xs font-bold text-[#475569] uppercase tracking-wider mb-2">
+                                Voting Session Duration
+                              </label>
+                              <select
+                                value={durationMinutes}
+                                disabled={status === 'LIVE'}
+                                onChange={async (e) => {
+                                  const result = await setElectionDuration(Number(e.target.value));
+                                  if (!result.success) showToast(result.message || 'Unable to update duration.', 'error');
+                                }}
+                                className="w-full rounded-xl border border-[#cbd5e1] bg-white px-4 py-3 text-sm font-semibold text-[#0f172a] focus:border-[#0055c2] disabled:bg-[#f8fafc] disabled:cursor-not-allowed"
+                              >
+                                <option value={60}>1 Hour</option>
+                                <option value={120}>2 Hours (Default)</option>
+                                <option value={150}>2 Hours 30 Minutes</option>
+                                <option value={180}>3 Hours</option>
+                                <option value={240}>4 Hours</option>
+                              </select>
+                              <p className="text-[11px] text-[#64748b] mt-1.5">
+                                Duration determines the countdown timer once the election is made LIVE.
+                              </p>
+                            </div>
+
+                            <div className="p-4 rounded-xl bg-[#f8fafc] border border-[#e2e8f0] space-y-2 text-xs">
+                              <div className="flex justify-between text-[#475569]">
+                                <span>Configured Duration:</span>
+                                <strong className="text-[#0f172a]">{durationMinutes} minutes</strong>
+                              </div>
+                              <div className="flex justify-between text-[#475569]">
+                                <span>Countdown Time Remaining:</span>
+                                <strong className="text-[#0055c2] font-mono">{status === 'LIVE' ? remainingTime : 'Not Active'}</strong>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col justify-between p-5 rounded-2xl bg-[#eff6ff] border border-[#bfdbfe]">
+                            <div>
+                              <h3 className="text-sm font-bold text-[#1e40af] flex items-center gap-2">
+                                <Sliders className="w-4 h-4" />
+                                Master Election Switch
+                              </h3>
+                              <p className="text-xs text-[#3b82f6] mt-2 leading-relaxed">
+                                {status === 'LIVE'
+                                  ? 'The election is currently live. Voting booth is open and receiving voter ballots in real time.'
+                                  : status === 'CERTIFIED'
+                                  ? 'Election results have been certified. To run another session, reset the election.'
+                                  : 'Starting the election opens the student voting booth and activates the live countdown timer.'}
+                              </p>
+                            </div>
+
+                            <div className="pt-6">
+                              <button
+                                type="button"
+                                onClick={() => handleStatusChange(status === 'LIVE' ? 'CLOSED' : 'LIVE')}
+                                disabled={status === 'CERTIFIED'}
+                                className={`w-full py-3 px-4 rounded-xl font-bold text-sm text-white shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
+                                  status === 'LIVE'
+                                    ? 'bg-[#dc2626] hover:bg-[#b91c1c]'
+                                    : 'bg-[#0055c2] hover:bg-[#003f93]'
+                                }`}
+                              >
+                                {status === 'LIVE' ? (
+                                  <>
+                                    <AlertTriangle className="w-4 h-4" />
+                                    Stop Election Voting
+                                  </>
+                                ) : (
+                                  <>
+                                    <PlayCircle className="w-4 h-4" />
+                                    Start Live Election
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* TAB: ELECTORAL COMMISSION */}
+                  {settingsTab === 'commission' && (
+                    <div className="bg-white rounded-2xl border border-[#e2e8f0] shadow-xs p-6 space-y-6">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#f1f5f9] pb-4">
+                        <div>
+                          <h2 className="text-lg font-bold text-[#0f172a]">Electoral Commission (ELECO) Roster</h2>
+                          <p className="text-xs text-[#64748b] mt-0.5">Officers responsible for certification and election integrity</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => void saveCommissionMembers()}
+                          disabled={savingCommissionMembers}
+                          className="px-4 py-2 rounded-xl bg-[#0055c2] hover:bg-[#003f93] text-white text-xs font-bold shadow-xs transition-colors cursor-pointer self-start sm:self-auto disabled:opacity-50"
+                        >
+                          {savingCommissionMembers ? 'Saving...' : 'Save Commission Roster'}
+                        </button>
+                      </div>
+
+                      <div className="space-y-4">
+                        {editableCommissionMembers.map((member, index) => (
+                          <div key={index} className="flex flex-col sm:flex-row items-center gap-3 p-3.5 rounded-xl border border-[#e2e8f0] bg-[#f8fafc]">
+                            <div className="w-10 h-10 rounded-full bg-[#dbeafe] text-[#1d4ed8] font-bold text-xs flex items-center justify-center shrink-0">
+                              {member.initials}
+                            </div>
+                            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+                              <input
+                                type="text"
+                                value={member.name}
+                                onChange={(e) => {
+                                  const updated = [...editableCommissionMembers];
+                                  updated[index] = { ...updated[index], name: e.target.value };
+                                  setEditableCommissionMembers(updated);
+                                  setCommissionMembersDirty(true);
+                                }}
+                                className="w-full rounded-lg border border-[#cbd5e1] bg-white px-3 py-2 text-xs font-medium text-[#0f172a] focus:border-[#0055c2]"
+                                placeholder="Officer Name"
+                              />
+                              <input
+                                type="text"
+                                value={member.role}
+                                onChange={(e) => {
+                                  const updated = [...editableCommissionMembers];
+                                  updated[index] = { ...updated[index], role: e.target.value };
+                                  setEditableCommissionMembers(updated);
+                                  setCommissionMembersDirty(true);
+                                }}
+                                className="w-full rounded-lg border border-[#cbd5e1] bg-white px-3 py-2 text-xs font-medium text-[#0f172a] focus:border-[#0055c2]"
+                                placeholder="Role Title (e.g. ELECO Chairman)"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* TAB: SECURITY & ACCESS */}
+                  {settingsTab === 'security' && (
+                    <div className="bg-white rounded-2xl border border-[#e2e8f0] shadow-xs p-6 space-y-6">
+                      <div className="border-b border-[#f1f5f9] pb-4">
+                        <h2 className="text-lg font-bold text-[#0f172a]">Security & System Integrity</h2>
+                        <p className="text-xs text-[#64748b] mt-0.5">Active session parameters, protocol statuses, and audit integrity</p>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="p-4 rounded-xl bg-[#f8fafc] border border-[#e2e8f0]">
+                          <div className="text-[11px] font-bold uppercase tracking-wider text-[#64748b] mb-1">Session Protocol</div>
+                          <div className="text-sm font-bold text-[#0f172a] flex items-center gap-1.5">
+                            <ShieldCheck className="w-4 h-4 text-[#16a34a]" />
+                            Verified Secure Session
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-xl bg-[#f8fafc] border border-[#e2e8f0]">
+                          <div className="text-[11px] font-bold uppercase tracking-wider text-[#64748b] mb-1">Ballot Verification</div>
+                          <div className="text-sm font-bold text-[#0f172a] flex items-center gap-1.5">
+                            <CheckCircle2 className="w-4 h-4 text-[#0055c2]" />
+                            Tamper-Proof Receipts
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-xl bg-[#f8fafc] border border-[#e2e8f0]">
+                          <div className="text-[11px] font-bold uppercase tracking-wider text-[#64748b] mb-1">Audit Ledger</div>
+                          <div className="text-sm font-bold text-[#0f172a] flex items-center gap-1.5">
+                            <History className="w-4 h-4 text-[#0284c7]" />
+                            {auditLogs.length} Events Logged
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-xl border border-[#e2e8f0] bg-[#fafafa] space-y-2 text-xs text-[#475569]">
+                        <h4 className="font-bold text-[#0f172a] text-sm">Active Administrative Access</h4>
+                        <p>Authenticated Administrator: <strong>{adminName}</strong> ({adminEmail || 'admin@fabamssa.unilorin.edu.ng'})</p>
+                        <p>Authorized Action Tier: <strong>ELECO Level-1 Supreme Authority</strong></p>
+                        <p>Session Policy: <strong>Single concurrent administrative terminal</strong></p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* TAB: DANGER ZONE */}
+                  {settingsTab === 'danger' && (
+                    <div className="rounded-2xl border border-[#fecdd3] bg-[#fff1f2] p-6 shadow-xs space-y-6">
+                      <div className="flex items-start gap-4">
+                        <div className="p-3 rounded-xl bg-[#ffe4e6] text-[#e11d48] shrink-0">
+                          <AlertTriangle className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h2 className="text-lg font-bold text-[#9f1239]">Danger Zone — Election Reset</h2>
+                          <p className="text-xs text-[#be123c] mt-1 leading-relaxed">
+                            Resetting the election will permanently delete all votes, ballots, voter accreditations, candidate results, and audit trails. This action is irreversible.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-white/80 border border-[#fecdd3] text-xs text-[#9f1239] space-y-1.5">
+                        <p className="font-bold">What will be removed:</p>
+                        <ul className="list-disc pl-5 space-y-1 text-[#881337]">
+                          <li>All ballots submitted during the election</li>
+                          <li>All voter accreditation statuses and records</li>
+                          <li>Candidate vote tallies and positions status</li>
+                          <li>System audit logs and certification documents</li>
+                        </ul>
+                      </div>
+
+                      <div className="flex justify-end pt-2">
+                        <button
+                          type="button"
+                          onClick={() => setShowResetConfirmation(true)}
+                          className="inline-flex items-center gap-2 rounded-xl bg-[#e11d48] hover:bg-[#be123c] px-5 py-3 text-xs font-bold text-white shadow-sm transition-colors cursor-pointer"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          Reset Entire Election
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                </section>
               </div>
             </div>
           )}
