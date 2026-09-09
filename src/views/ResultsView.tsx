@@ -97,8 +97,8 @@ export const ResultsView: React.FC = () => {
                     <p className="mb-5 text-center text-sm text-[#424653] md:text-left">Department of {winner.department}</p>
 
                     <div className="mb-2 flex items-end justify-between gap-3">
-                      <span className="text-2xl font-bold text-[#131b2e]">{winner.votesCount} Votes</span>
-                      <span className="text-2xl font-extrabold text-[#003f93]">{winnerPercent.toFixed(1)}%</span>
+                      <span className="text-sm font-semibold text-[#424653]">Vote Share</span>
+                      <span className="text-2xl sm:text-3xl font-extrabold text-[#003f93]">{winnerPercent.toFixed(1)}%</span>
                     </div>
 
                     <div className="h-3 w-full overflow-hidden rounded-full bg-[#e2e7ff]">
@@ -119,8 +119,7 @@ export const ResultsView: React.FC = () => {
               <thead>
                 <tr className="border-b border-[#dfe7ff] bg-[#f1f5f9]">
                   <th className="px-4 py-3 text-[11px] font-bold uppercase tracking-[0.12em] text-[#424653]">Candidate</th>
-                  <th className="px-4 py-3 text-right text-[11px] font-bold uppercase tracking-[0.12em] text-[#424653]">Votes</th>
-                  <th className="w-24 px-4 py-3 text-right text-[11px] font-bold uppercase tracking-[0.12em] text-[#424653]">%</th>
+                  <th className="w-32 px-4 py-3 text-right text-[11px] font-bold uppercase tracking-[0.12em] text-[#424653]">Percentage</th>
                 </tr>
               </thead>
               <tbody>
@@ -135,10 +134,9 @@ export const ResultsView: React.FC = () => {
                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#eaeefc] text-[10px] font-bold text-[#424653]">
                           {getInitials(candidate.fullName)}
                         </div>
-                        {candidate.fullName}
+                        <span className="font-medium text-[#131b2e]">{candidate.fullName}</span>
                       </td>
-                      <td className="px-4 py-3 text-right text-sm text-[#131b2e]">{candidate.votesCount}</td>
-                      <td className="px-4 py-3 text-right text-sm text-[#424653]">{candidateShare.toFixed(1)}%</td>
+                      <td className="px-4 py-3 text-right text-sm font-bold text-[#003f93]">{candidateShare.toFixed(1)}%</td>
                     </tr>
                   );
                 })}
@@ -169,8 +167,8 @@ export const ResultsView: React.FC = () => {
                     </div>
 
                     <div className="text-right">
-                      <div className="font-bold text-[#131b2e]">{candidate.votesCount} Votes</div>
-                      <div className="text-[11px] text-[#424653]">{candidateShare.toFixed(1)}%</div>
+                      <div className="font-bold text-base text-[#003f93]">{candidateShare.toFixed(1)}%</div>
+                      <div className="text-[11px] text-[#424653]">Vote Share</div>
                     </div>
                   </div>
                 );

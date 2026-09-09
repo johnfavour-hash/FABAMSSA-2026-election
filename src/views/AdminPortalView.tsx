@@ -3292,7 +3292,6 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                     {[
                       { id: 'profile' as const, label: 'Profile & Account', icon: User, desc: 'Admin identity & avatar' },
                       { id: 'election' as const, label: 'Election Controls', icon: Sliders, desc: 'Timing & start/stop voting' },
-                      { id: 'commission' as const, label: 'Electoral Commission', icon: Users, desc: 'ELECO member roster' },
                       { id: 'security' as const, label: 'Security & Access', icon: ShieldCheck, desc: 'Active session & clearance' },
                       { id: 'danger' as const, label: 'Danger Zone', icon: AlertTriangle, desc: 'Reset election database' },
                     ].map(({ id, label, icon: Icon, desc }) => {
@@ -3572,61 +3571,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                     </div>
                   )}
 
-                  {/* TAB: ELECTORAL COMMISSION */}
-                  {settingsTab === 'commission' && (
-                    <div className="bg-white rounded-2xl border border-[#e2e8f0] shadow-xs p-6 space-y-6">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#f1f5f9] pb-4">
-                        <div>
-                          <h2 className="text-lg font-bold text-[#0f172a]">Electoral Commission (ELECO) Roster</h2>
-                          <p className="text-xs text-[#64748b] mt-0.5">Officers responsible for certification and election integrity</p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => void saveCommissionMembers()}
-                          disabled={savingCommissionMembers}
-                          className="px-4 py-2 rounded-xl bg-[#0055c2] hover:bg-[#003f93] text-white text-xs font-bold shadow-xs transition-colors cursor-pointer self-start sm:self-auto disabled:opacity-50"
-                        >
-                          {savingCommissionMembers ? 'Saving...' : 'Save Commission Roster'}
-                        </button>
-                      </div>
 
-                      <div className="space-y-4">
-                        {editableCommissionMembers.map((member, index) => (
-                          <div key={index} className="flex flex-col sm:flex-row items-center gap-3 p-3.5 rounded-xl border border-[#e2e8f0] bg-[#f8fafc]">
-                            <div className="w-10 h-10 rounded-full bg-[#dbeafe] text-[#1d4ed8] font-bold text-xs flex items-center justify-center shrink-0">
-                              {member.initials}
-                            </div>
-                            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
-                              <input
-                                type="text"
-                                value={member.name}
-                                onChange={(e) => {
-                                  const updated = [...editableCommissionMembers];
-                                  updated[index] = { ...updated[index], name: e.target.value };
-                                  setEditableCommissionMembers(updated);
-                                  setCommissionMembersDirty(true);
-                                }}
-                                className="w-full rounded-lg border border-[#cbd5e1] bg-white px-3 py-2 text-xs font-medium text-[#0f172a] focus:border-[#0055c2]"
-                                placeholder="Officer Name"
-                              />
-                              <input
-                                type="text"
-                                value={member.role}
-                                onChange={(e) => {
-                                  const updated = [...editableCommissionMembers];
-                                  updated[index] = { ...updated[index], role: e.target.value };
-                                  setEditableCommissionMembers(updated);
-                                  setCommissionMembersDirty(true);
-                                }}
-                                className="w-full rounded-lg border border-[#cbd5e1] bg-white px-3 py-2 text-xs font-medium text-[#0f172a] focus:border-[#0055c2]"
-                                placeholder="Role Title (e.g. ELECO Chairman)"
-                              />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
 
                   {/* TAB: SECURITY & ACCESS */}
                   {settingsTab === 'security' && (

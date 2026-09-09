@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useElection } from '../context/ElectionContext';
 import { CheckCircle2, BarChart2, ShieldCheck, GraduationCap, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -9,19 +9,47 @@ interface HeroProps {
   onStartVoting: () => void;
 }
 
-const HERO_VIDEOS = [
+const HERO_IMAGES = [
   {
-    url: '/assets/hero/hero-1.mp4',
+    url: '/assets/hero/images/images (1).jpg',
     caption: 'Faculty of Basic Medical Sciences Complex, UNIPORT'
   },
   {
-    url: '/assets/hero/hero-2.mp4',
-    caption: 'FABAMSSA Student Assembly & Congress'
+    url: '/assets/hero/images/images (2).jpg',
+    caption: 'FABAMSSA Student Assembly & Delegates'
   },
   {
-    url: '/assets/hero/hero-3.mp4',
-    caption: 'University of Port Harcourt College of Health Sciences'
-  }
+    url: '/assets/hero/images/images (5).jpg',
+    caption: 'Faculty Student Leaders and Executives'
+  },
+  {
+    url: '/assets/hero/images/images (8).jpg',
+    caption: 'Basic Medical Sciences Academic Congress'
+  },
+  {
+    url: '/assets/hero/images/images (9).jpg',
+    caption: 'FABAMSSA Democratic Electoral Convention'
+  },
+  {
+    url: '/assets/hero/images/images (10).jpg',
+    caption: 'College of Health Sciences UNIPORT'
+  },
+  {
+    url: '/assets/hero/images/images (11).jpg',
+    caption: 'Departmental Student Delegations'
+  },
+  {
+    url: '/assets/hero/images/images (12).jpg',
+    caption: 'Faculty Assembly and Council Session'
+  },
+  {
+    url: '/assets/hero/images/images (14).jpg',
+    caption: 'FABAMSSA Election Hall'
+  },
+  {
+    url: '/assets/hero/images/electoos.jpg',
+    caption: 'Electoral Commission Screening Session'
+  },
 ];
 
 export const Hero: React.FC<HeroProps> = ({
@@ -32,28 +60,14 @@ export const Hero: React.FC<HeroProps> = ({
   const { status, endTime, currentVoter } = useElection();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [clockNow, setClockNow] = useState(Date.now());
-  const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
 
-  // Auto transition carousel every 11 seconds
+  // Auto transition carousel every 6 seconds
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % HERO_VIDEOS.length);
-    }, 11000);
+      setCurrentImageIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+    }, 6000);
     return () => clearInterval(timer);
   }, []);
-
-  useEffect(() => {
-    videoRefs.current.forEach((video, index) => {
-      if (!video) return;
-
-      if (index === currentImageIndex) {
-        void video.play().catch(() => undefined);
-      } else {
-        video.pause();
-        video.currentTime = 0;
-      }
-    });
-  }, [currentImageIndex]);
 
   useEffect(() => {
     const timer = setInterval(() => setClockNow(Date.now()), 1000);
@@ -65,6 +79,14 @@ export const Hero: React.FC<HeroProps> = ({
     : 0;
   const remainingTime = `${String(Math.floor(remainingSeconds / 3600)).padStart(2, '0')}:${String(Math.floor((remainingSeconds % 3600) / 60)).padStart(2, '0')}:${String(remainingSeconds % 60).padStart(2, '0')}`;
 
+  const prevSlide = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length);
+  };
+
+  const nextSlide = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+  };
+
   return (
     <motion.section
       id="bamssa-hero-section"
@@ -74,44 +96,45 @@ export const Hero: React.FC<HeroProps> = ({
       transition={{ duration: 0.7, ease: 'easeOut' }}
     >
       {/* Full-bleed Carousel Backgrounds */}
-      <div className="absolute inset-0 z-0 select-none overflow-hidden">
+      <div className="absolute inset-0 z-0 select-none overflow-hidden bg-[#001944]">
         {/* Layered dark blue gradient overlay for optimal text contrast */}
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-t from-[#001944]/95 via-[#003f93]/70 to-[#001944]/65 z-10"
-          initial={{ opacity: 0.5 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#001944]/95 via-[#003f93]/75 to-[#001944]/70 z-10" />
 
-        {HERO_VIDEOS.map((video, idx) => (
+        {HERO_IMAGES.map((image, idx) => (
           <motion.div
-            key={idx}
-            className={`absolute inset-0 bg-cover bg-center scale-105 ${
-              idx === currentImageIndex ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            key={image.url}
+            className={`absolute inset-0 bg-cover bg-center ${
+              idx === currentImageIndex ? 'opacity-100 z-5' : 'opacity-0 z-0 pointer-events-none'
             }`}
-            initial={{ scale: 1.08, opacity: 0 }}
+            style={{ backgroundImage: `url("${image.url}")` }}
+            initial={{ scale: 1.05, opacity: 0 }}
             animate={{
               opacity: idx === currentImageIndex ? 1 : 0,
-              scale: 1.08,
+              scale: idx === currentImageIndex ? 1.08 : 1.02,
             }}
-            transition={{ duration: 1.1, ease: 'easeInOut' }}
-          >
-            <video
-              className="h-full w-full object-cover"
-              src={video.url}
-              ref={(element) => {
-                videoRefs.current[idx] = element;
-              }}
-              autoPlay={idx === currentImageIndex}
-              muted
-              loop
-              playsInline
-              preload={idx === currentImageIndex ? 'auto' : 'metadata'}
-              aria-label={video.caption}
-            />
-          </motion.div>
+            transition={{ duration: 1.2, ease: 'easeInOut' }}
+          />
         ))}
       </div>
+
+      {/* Manual Slide Navigation Arrows */}
+      <button
+        type="button"
+        onClick={prevSlide}
+        aria-label="Previous slide"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-25 p-2 rounded-full bg-black/25 hover:bg-black/50 text-white/80 hover:text-white backdrop-blur-xs transition-all cursor-pointer hidden md:flex items-center justify-center"
+      >
+        <ChevronLeft className="w-6 h-6" />
+      </button>
+
+      <button
+        type="button"
+        onClick={nextSlide}
+        aria-label="Next slide"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-25 p-2 rounded-full bg-black/25 hover:bg-black/50 text-white/80 hover:text-white backdrop-blur-xs transition-all cursor-pointer hidden md:flex items-center justify-center"
+      >
+        <ChevronRight className="w-6 h-6" />
+      </button>
 
       {/* Hero Content Layered Directly Over */}
       <motion.div
@@ -120,7 +143,7 @@ export const Hero: React.FC<HeroProps> = ({
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
       >
-        {/* Sub-badge: KEEP rounded-full */}
+        {/* Sub-badge */}
         <motion.div
           className="mb-5 inline-flex items-center gap-2.5 rounded-full border border-white/25 bg-white/10 px-3.5 py-2 text-[10px] font-semibold tracking-[0.18em] uppercase text-white shadow-sm backdrop-blur-md sm:px-4 sm:text-[11px]"
           initial={{ scale: 0.95, opacity: 0 }}
@@ -162,7 +185,7 @@ export const Hero: React.FC<HeroProps> = ({
             <motion.button
               id="hero-vote-live-btn"
               onClick={onStartVoting}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#2563eb] px-5 py-2.75 text-sm font-semibold text-white shadow-lg shadow-[#003f93]/25 transition-all hover:bg-[#003f93] active:scale-[0.99] sm:w-auto"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#2563eb] px-5 py-2.75 text-sm font-semibold text-white shadow-lg shadow-[#003f93]/25 transition-all hover:bg-[#003f93] active:scale-[0.99] sm:w-auto cursor-pointer"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -173,7 +196,7 @@ export const Hero: React.FC<HeroProps> = ({
             <motion.button
               id="hero-check-eligibility-btn"
               onClick={onViewLiveMonitor}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#2563eb] px-5 py-2.75 text-sm font-semibold text-white shadow-lg shadow-[#003f93]/25 transition-all hover:bg-[#003f93] active:scale-[0.99] sm:w-auto"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#2563eb] px-5 py-2.75 text-sm font-semibold text-white shadow-lg shadow-[#003f93]/25 transition-all hover:bg-[#003f93] active:scale-[0.99] sm:w-auto cursor-pointer"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -185,7 +208,7 @@ export const Hero: React.FC<HeroProps> = ({
           <motion.button
             id="hero-view-monitor-btn"
             onClick={onViewLiveMonitor}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 py-2.75 text-sm font-semibold text-white backdrop-blur-md shadow-sm transition-all hover:bg-white/20 active:scale-[0.99] sm:w-auto"
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 py-2.75 text-sm font-semibold text-white backdrop-blur-md shadow-sm transition-all hover:bg-white/20 active:scale-[0.99] sm:w-auto cursor-pointer"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -201,11 +224,11 @@ export const Hero: React.FC<HeroProps> = ({
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.55 }}
         >
-          {HERO_VIDEOS.map((_, idx) => (
+          {HERO_IMAGES.map((_, idx) => (
             <motion.button
               key={idx}
               onClick={() => setCurrentImageIndex(idx)}
-              className={`h-1.5 rounded-none transition-all cursor-pointer ${
+              className={`h-1.5 transition-all cursor-pointer ${
                 idx === currentImageIndex ? 'w-8 bg-[#8ab0fe]' : 'w-2 bg-white/40 hover:bg-white/70'
               }`}
               aria-label={`Slide ${idx + 1}`}
