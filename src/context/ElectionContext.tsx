@@ -786,17 +786,16 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setVoters([]);
     setAuditLogs([]);
     setCurrentVoter(null);
-    setIsAdminLoggedIn(false);
     setDepartmentStats(EMPTY_DEPT_STATS());
     localStorage.removeItem(STORAGE_KEYS.STATUS);
     localStorage.removeItem(STORAGE_KEYS.CANDIDATES);
     localStorage.removeItem(STORAGE_KEYS.VOTERS);
     localStorage.removeItem(STORAGE_KEYS.AUDIT_LOGS);
     localStorage.removeItem(STORAGE_KEYS.CURRENT_VOTER);
-    localStorage.removeItem(STORAGE_KEYS.ADMIN_AUTH);
     localStorage.removeItem(STORAGE_KEYS.DEPT_STATS);
+    await refreshElectionData();
     addAuditLog('System Reset to Initial Calibration', 'System Admin', 'SYSTEM');
-    return { success: true };
+    return { success: true, message: 'Election reset successfully to a clean state.' };
   };
 
   // Computed metrics
