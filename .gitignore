@@ -7,6 +7,8 @@ venv/
 # Production
 build/
 dist/
+.next/
+*.tsbuildinfo
 
 # Tests & coverage
 coverage/

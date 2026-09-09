@@ -128,8 +128,8 @@ export const LiveMonitorView: React.FC<LiveMonitorViewProps> = ({
                     </p>
 
                     <div className="flex justify-between items-end mb-2 gap-3">
-                      <span className="text-2xl sm:text-3xl font-bold text-[#131b2e]">{winner.votesCount} Votes</span>
-                      <span className="text-2xl font-extrabold text-[#003f93]">
+                      <span className="text-sm font-semibold text-[#424653]">Vote Share</span>
+                      <span className="text-2xl sm:text-3xl font-extrabold text-[#003f93]">
                         {totalPositionVotes > 0 ? `${Math.round((winner.votesCount / totalPositionVotes) * 1000) / 10}%` : '0%'}
                       </span>
                     </div>
@@ -151,24 +151,21 @@ export const LiveMonitorView: React.FC<LiveMonitorViewProps> = ({
               <thead>
                 <tr className="bg-[#f1f5f9] border-b border-[#c2c6d5]">
                   <th className="py-3 px-4 text-[11px] font-bold uppercase tracking-wide text-[#424653]">Candidate</th>
-                  <th className="py-3 px-4 text-[11px] font-bold uppercase tracking-wide text-[#424653] text-right">Votes</th>
-                  <th className="py-3 px-4 text-[11px] font-bold uppercase tracking-wide text-[#424653] text-right w-28">Percentage</th>
+                  <th className="py-3 px-4 text-[11px] font-bold uppercase tracking-wide text-[#424653] text-right w-32">Percentage</th>
                 </tr>
               </thead>
               <tbody>
                 {displayedCandidates.map((candidate, index) => {
                   const candidatePercent = totalPositionVotes > 0 ? (candidate.votesCount / totalPositionVotes) * 100 : 0;
-                  const isWinner = index === 0;
                   return (
                     <tr key={candidate.id} className={index === displayedCandidates.length - 1 ? 'hover:bg-[#f8faff]' : 'border-b border-[#e8ebf8] hover:bg-[#f8faff]'}>
                       <td className="py-3 px-4 text-sm text-[#131b2e] flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-[#eaeefc] text-[#424653] text-[10px] font-bold flex items-center justify-center">
                           {getInitials(candidate.fullName)}
                         </div>
-                        {candidate.fullName}
+                        <span className="font-medium text-[#131b2e]">{candidate.fullName}</span>
                       </td>
-                      <td className="py-3 px-4 text-sm text-right text-[#131b2e]">{candidate.votesCount}</td>
-                      <td className="py-3 px-4 text-sm text-right text-[#424653]">{Math.round(candidatePercent * 10) / 10}%</td>
+                      <td className="py-3 px-4 text-sm font-bold text-right text-[#003f93]">{Math.round(candidatePercent * 10) / 10}%</td>
                     </tr>
                   );
                 })}
@@ -195,8 +192,8 @@ export const LiveMonitorView: React.FC<LiveMonitorViewProps> = ({
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-semibold text-[#131b2e]">{candidate.votesCount} Votes</div>
-                    <div className="text-[11px] text-[#424653]">{totalPositionVotes > 0 ? Math.round((candidate.votesCount / totalPositionVotes) * 1000) / 10 : 0}%</div>
+                    <div className="font-bold text-base text-[#003f93]">{totalPositionVotes > 0 ? `${Math.round((candidate.votesCount / totalPositionVotes) * 1000) / 10}%` : '0%'}</div>
+                    <div className="text-[11px] text-[#424653]">Vote Share</div>
                   </div>
                 </div>
               ))}
