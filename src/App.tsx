@@ -224,6 +224,8 @@ function ElectionAppContent() {
                 voter={selectedAccreditationVoter}
                 onNavigateToDashboard={() => setCurrentView(currentVoter ? 'dashboard' : 'home')}
                 onNavigateToElectionDetails={() => setCurrentView('elections')}
+                onNavigateToEligibility={() => setCurrentView('eligibility')}
+                onNavigateToVoterLogin={() => setCurrentView('login')}
               />
             }
           />

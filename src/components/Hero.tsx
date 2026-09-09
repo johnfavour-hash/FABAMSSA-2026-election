@@ -148,7 +148,7 @@ export const Hero: React.FC<HeroProps> = ({
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.35 }}
         >
-          The official, secure voting platform for Faculty of Basic Medical Science students (FABAMSSA). Cast your confidential ballot and shape our association's future.
+          The official, secure voting platform for accredited FABAMSSA delegates (Faculty of Basic Medical Science Students Association). Cast your confidential ballot and shape our association's future.
         </motion.p>
 
         {/* Action Buttons */}

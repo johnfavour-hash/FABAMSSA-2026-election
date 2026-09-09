@@ -88,7 +88,7 @@ export const GuidelinesView: React.FC<GuidelinesViewProps> = ({
             MOTTO: Structural &amp; Functional Pathway to Modern Medicine
           </p>
           <p className="text-sm text-[#424653] mt-2">
-            In line with <strong>Article 15, Section 15.4</strong> of the FABAMSSA Constitution — Rules and Regulations governing the conduct of all aspirants during any Faculty of Basic Medical Sciences Students Association Election.
+            In line with <strong>Article 15, Section 15.4</strong> of the FABAMSSA Constitution — Rules and Regulations governing the conduct of all aspirants during any FABAMSSA Delegate Election.
           </p>
         </div>
 

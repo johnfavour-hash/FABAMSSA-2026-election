@@ -109,7 +109,7 @@ export const ElectionDetailsView: React.FC<ElectionDetailsViewProps> = ({
               FABAMSSA UNIPORT Chapter
             </h1>
             <p className="text-base md:text-lg font-medium text-[#424653]">
-              Faculty of Basic Medical Science Students Association • General Executive Elections
+              Faculty of Basic Medical Science Students Association • Delegate Executive Elections
             </p>
           </div>
 
@@ -148,7 +148,7 @@ export const ElectionDetailsView: React.FC<ElectionDetailsViewProps> = ({
                 Date
               </p>
               <p className="text-base md:text-lg font-bold text-[#131b2e]">
-                4 September 2026
+                10 September 2026
               </p>
             </div>
             <div>
@@ -176,7 +176,7 @@ export const ElectionDetailsView: React.FC<ElectionDetailsViewProps> = ({
             Overview
           </h2>
           <p className="text-base md:text-lg text-[#424653] leading-relaxed">
-            The FABAMSSA UNIPORT 2026/2027 tenure elections represent a critical juncture for our student body. We are committed to an electoral process that prioritizes academic integrity, utmost security, and institutional authority. This election will employ advanced protocols to ensure absolute ballot secrecy while maintaining transparent, verifiable audit logs. Your participation shapes the future of our association.
+            The FABAMSSA UNIPORT 2026/2027 tenure delegate elections represent a critical juncture for our association. Only duly accredited delegates from each department will cast ballots in this election. We are committed to an electoral process that prioritizes academic integrity, utmost security, and institutional authority. This election will employ advanced protocols to ensure absolute ballot secrecy while maintaining transparent, verifiable audit logs. Your participation as a delegate shapes the future of our association.
           </p>
         </section>
 
@@ -186,25 +186,25 @@ export const ElectionDetailsView: React.FC<ElectionDetailsViewProps> = ({
             Election Timeline
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            {/* 1. Registration */}
+            {/* 1. Delegate Accreditation */}
             <div className="bg-[#eaedff]/60 border border-[#c2c6d5]/70 rounded-xl p-5 hover:border-[#0055c2]/40 transition-colors">
               <FileText className="w-6 h-6 text-[#424653] mb-2" />
               <h3 className="text-base font-bold text-[#131b2e] mb-1">
-                Registration
+                Delegate Accreditation
               </h3>
               <p className="text-sm text-[#424653]">
-                Sep 4, 2026
+                Sep 10, 2026
               </p>
             </div>
 
-            {/* 2. Accreditation */}
+            {/* 2. Delegate Verification */}
             <div className="bg-[#eaedff]/60 border border-[#c2c6d5]/70 rounded-xl p-5 hover:border-[#0055c2]/40 transition-colors">
               <ShieldCheck className="w-6 h-6 text-[#424653] mb-2" />
               <h3 className="text-base font-bold text-[#131b2e] mb-1">
-                Accreditation
+                Delegate Verification
               </h3>
               <p className="text-sm text-[#424653]">
-                Sep 4, 2026
+                Sep 10, 2026
               </p>
             </div>
 
@@ -216,7 +216,7 @@ export const ElectionDetailsView: React.FC<ElectionDetailsViewProps> = ({
                 Voting Day
               </h3>
               <p className="text-sm text-white/80 relative z-10">
-                Sep 4, 8 AM - 4 PM
+                Sep 10, 8 AM - 4 PM
               </p>
             </div>
 
@@ -227,7 +227,7 @@ export const ElectionDetailsView: React.FC<ElectionDetailsViewProps> = ({
                 Results
               </h3>
               <p className="text-sm text-[#424653]">
-                Sep 4, 5 PM
+                Sep 10, 5 PM
               </p>
             </div>
           </div>

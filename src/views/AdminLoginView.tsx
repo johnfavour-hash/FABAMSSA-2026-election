@@ -88,7 +88,7 @@ export const AdminLoginView: React.FC<AdminLoginViewProps> = ({
           </h2>
 
           <p className="text-base text-blue-100 max-w-md leading-relaxed border-l-4 border-blue-300 pl-4 font-normal">
-            Administrative control center for the BAMSSA 2026 General Elections. Secure, transparent, and authoritative management of the electoral process.
+            Administrative control center for the BAMSSA 2026 Delegate Elections. Secure, transparent, and authoritative management of the electoral process.
           </p>
         </div>
 

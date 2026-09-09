@@ -19,7 +19,8 @@ import {
   IdCard,
   FileText,
   X,
-  Clock
+  Clock,
+  Loader2,
 } from 'lucide-react';
 
 interface RegistrationViewProps {
@@ -60,6 +61,7 @@ export const RegistrationView: React.FC<RegistrationViewProps> = ({
   const [registeredPin, setRegisteredPin] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [copiedPin, setCopiedPin] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -118,53 +120,59 @@ export const RegistrationView: React.FC<RegistrationViewProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setErrorMessage(null);
+    setIsSubmitting(true);
 
-    if (password && confirmPassword && password !== confirmPassword) {
-      setErrorMessage('Passwords do not match. Please verify your security password.');
-      return;
-    }
-
-    if (!termsAccepted) {
-      setErrorMessage('Please confirm that the information provided is accurate.');
-      return;
-    }
-
-    if (!selectedFile || !filePreview) {
-      setErrorMessage('Please upload a clear photo of your UNIPORT Student ID or recent Course Form.');
-      return;
-    }
-
-    const trimmedMatric = matricNumber.trim().toUpperCase();
-    const existing = checkEligibility(trimmedMatric);
-    if (existing) {
-      if (existing.isAccredited) {
-        setErrorMessage(`Matriculation ${trimmedMatric} is already registered & accredited with PIN: ${existing.voterPin}`);
-        setRegisteredPin(existing.voterPin);
-        setRegistrationSubmitted(true);
+    try {
+      if (password && confirmPassword && password !== confirmPassword) {
+        setErrorMessage('Passwords do not match. Please verify your security password.');
         return;
       }
-      if (existing.verificationStatus === 'pending') {
-        setErrorMessage(`Matriculation ${trimmedMatric} is already submitted and awaiting ELECO approval.`);
-        setRegistrationSubmitted(true);
+
+      if (!termsAccepted) {
+        setErrorMessage('Please confirm that the information provided is accurate.');
         return;
       }
-    }
 
-    const created = await registerVoter({
-      fullName: fullName.trim(),
-      matricNumber: trimmedMatric,
-      department,
-      level,
-      email: email.trim() || `${trimmedMatric.toLowerCase().replace('/', '')}@uniport.edu.ng`,
-      phone: '+234 800 000 0000',
-      idCardUrl: filePreview,
-    });
+      if (!selectedFile || !filePreview) {
+        setErrorMessage('Please upload a clear photo of your UNIPORT Student ID or recent Course Form.');
+        return;
+      }
 
-    if (created) {
-      setRegisteredVoter(created);
-      setRegistrationSubmitted(true);
-      setRegisteredPin(null);
+      const trimmedMatric = matricNumber.trim().toUpperCase();
+      const existing = checkEligibility(trimmedMatric);
+      if (existing) {
+        if (existing.isAccredited) {
+          setErrorMessage(`Matriculation ${trimmedMatric} is already registered & accredited with PIN: ${existing.voterPin}`);
+          setRegisteredPin(existing.voterPin);
+          setRegistrationSubmitted(true);
+          return;
+        }
+        if (existing.verificationStatus === 'pending') {
+          setErrorMessage(`Matriculation ${trimmedMatric} is already submitted and awaiting ELECO approval.`);
+          setRegistrationSubmitted(true);
+          return;
+        }
+      }
+
+      const created = await registerVoter({
+        fullName: fullName.trim(),
+        matricNumber: trimmedMatric,
+        department,
+        level,
+        email: email.trim() || `${trimmedMatric.toLowerCase().replace('/', '')}@uniport.edu.ng`,
+        phone: '+234 800 000 0000',
+        idCardUrl: filePreview,
+      });
+
+      if (created) {
+        setRegisteredVoter(created);
+        setRegistrationSubmitted(true);
+        setRegisteredPin(null);
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -513,10 +521,24 @@ export const RegistrationView: React.FC<RegistrationViewProps> = ({
 
                   <button
                     type="submit"
-                    className="w-full h-14 bg-[#003f93] hover:bg-[#002f70] text-white rounded-xl font-bold text-base flex items-center justify-center gap-2 transition-colors shadow-sm cursor-pointer"
+                    disabled={isSubmitting}
+                    className={`w-full h-14 rounded-xl font-bold text-base flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer ${
+                      isSubmitting
+                        ? 'bg-[#0055c2]/80 text-white/90 cursor-not-allowed'
+                        : 'bg-[#003f93] hover:bg-[#002f70] text-white'
+                    }`}
                   >
-                    <span>Submit for Accreditation</span>
-                    <ArrowRight className="w-5 h-5" />
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>Submitting registration…</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Submit for Accreditation</span>
+                        <ArrowRight className="w-5 h-5" />
+                      </>
+                    )}
                   </button>
                 </div>
               </form>

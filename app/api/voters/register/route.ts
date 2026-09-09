@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, message: 'Missing voter registration data.' }, { status: 400 });
     }
     if (!allowedDepartments.has(payload.department) || !allowedLevels.has(payload.level)) {
-      return NextResponse.json({ success: false, message: 'Only Anatomy and Psychology students from 100L to 300L may register.' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Only accredited delegates from Anatomy and Psychology departments (100L to 300L) may register for this delegate election.' }, { status: 400 });
     }
 
     const idCardUrl = String(payload.idCardUrl ?? '').trim();

@@ -374,7 +374,7 @@ export const VotingBoothView: React.FC<VotingBoothViewProps> = ({
             <div className="bg-[#f2f3ff] p-4 sm:p-5 rounded-2xl border border-[#c2c6d5] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-xs">
               <div>
                 <h2 className="text-base sm:text-lg font-bold text-[#131b2e] mb-0.5">
-                  FABAMSSA General Elections 2026
+                  FABAMSSA Delegate Elections 2026
                 </h2>
                 <p className="text-xs sm:text-sm text-[#424653]">
                   Verify your selections for all positions.
@@ -672,13 +672,13 @@ export const VotingBoothView: React.FC<VotingBoothViewProps> = ({
             <div className="mb-8 border-b border-[#c2c6d5] pb-6">
               <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
                 <h1 className="text-lg sm:text-xl font-bold text-[#131b2e] flex items-center gap-2.5 flex-wrap">
-                  FABAMSSA GENERAL ELECTIONS 2026
+                  FABAMSSA DELEGATE ELECTIONS 2026
                   <span className="inline-flex items-center gap-1.5 bg-[#DBEAFE] text-[#1E40AF] px-2.5 py-0.5 rounded-full text-xs font-bold">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#1E40AF]"></span>
                     VOTING IS LIVE
                   </span>
                 </h1>
-                <p className="text-sm text-[#424653]">4 September 2026</p>
+                <p className="text-sm text-[#424653]">10 September 2026</p>
               </div>
 
               {/* Progress Bar Header */}

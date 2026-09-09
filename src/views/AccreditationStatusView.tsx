@@ -10,19 +10,27 @@ import {
   ArrowLeft,
   FileBadge,
   ShieldCheck,
-  Building2
+  Building2,
+  LayoutDashboard,
+  Vote,
+  Search,
+  LogIn,
 } from 'lucide-react';
 
 interface AccreditationStatusViewProps {
   voter?: Voter | null;
   onNavigateToDashboard: () => void;
   onNavigateToElectionDetails: () => void;
+  onNavigateToEligibility: () => void;
+  onNavigateToVoterLogin: () => void;
 }
 
 export const AccreditationStatusView: React.FC<AccreditationStatusViewProps> = ({
   voter,
   onNavigateToDashboard,
   onNavigateToElectionDetails,
+  onNavigateToEligibility,
+  onNavigateToVoterLogin,
 }) => {
   const { currentVoter, voters } = useElection();
   const trackedVoter = voter || currentVoter;
@@ -160,18 +168,34 @@ export const AccreditationStatusView: React.FC<AccreditationStatusViewProps> = (
             </div>
 
             {/* Actions */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-2">
               <button 
                 onClick={onNavigateToDashboard}
-                className="bg-[#0055C2] text-white text-xs sm:text-sm font-bold px-6 py-3.5 rounded-xl hover:bg-[#003f93] transition-colors shadow-xs cursor-pointer active:scale-98 text-center"
+                className="bg-[#0055C2] text-white text-sm font-bold px-5 py-3.5 rounded-xl hover:bg-[#003f93] transition-colors shadow-sm cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2 border border-[#003f93]/30"
               >
+                <LayoutDashboard className="w-4 h-4" />
                 Back to Dashboard
               </button>
               <button 
                 onClick={onNavigateToElectionDetails}
-                className="bg-white border border-[#c2c6d5] text-[#131b2e] text-xs sm:text-sm font-semibold px-6 py-3.5 rounded-xl hover:bg-[#f2f3ff] transition-colors shadow-xs cursor-pointer active:scale-98 text-center"
+                className="bg-white border border-[#c2c6d5] text-[#131b2e] text-sm font-semibold px-5 py-3.5 rounded-xl hover:bg-[#f2f3ff] hover:border-[#003f93]/30 transition-colors shadow-sm cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2"
               >
+                <Vote className="w-4 h-4 text-[#003f93]" />
                 View Election Details
+              </button>
+              <button 
+                onClick={onNavigateToEligibility}
+                className="bg-[#003f93]/10 border border-[#003f93]/20 text-[#003f93] text-sm font-semibold px-5 py-3.5 rounded-xl hover:bg-[#003f93]/15 transition-colors cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2"
+              >
+                <Search className="w-4 h-4" />
+                Check Eligibility
+              </button>
+              <button 
+                onClick={onNavigateToVoterLogin}
+                className="bg-[#003f93] text-white text-sm font-bold px-5 py-3.5 rounded-xl hover:bg-[#002f70] transition-colors shadow-sm cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2 border border-[#003f93]/30"
+              >
+                <LogIn className="w-4 h-4" />
+                Voter's Login
               </button>
             </div>
           </div>

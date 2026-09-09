@@ -188,7 +188,7 @@ export const ResultsView: React.FC = () => {
         <header className="mb-6 border-b border-[#dfe7ff] pb-5">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <h1 className="mb-2 text-3xl font-bold tracking-[-0.03em] text-[#131b2e] sm:text-4xl">General Elections 2026</h1>
+              <h1 className="mb-2 text-3xl font-bold tracking-[-0.03em] text-[#131b2e] sm:text-4xl">Delegate Elections 2026</h1>
               <div className="flex flex-wrap items-center gap-3">
                 <span className={`inline-flex items-center gap-1 rounded px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] ${isResultsCertified ? 'bg-[#003b82] text-white' : 'bg-[#fef3c7] text-[#92400e] border border-[#fcd34d]'}`}>
                   <CheckCircle2 className="h-3.5 w-3.5" />

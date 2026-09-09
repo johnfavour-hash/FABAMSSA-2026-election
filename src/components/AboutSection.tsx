@@ -59,7 +59,7 @@ export const AboutSection: React.FC = () => {
               }}
             ></div>
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#131b2e]/95 via-[#131b2e]/60 to-transparent p-4 text-white sm:p-5">
-              <p className="text-xs font-bold text-white/95">Basic Medical Science Students, Faculty of Basic Medical Sciences</p>
+              <p className="text-xs font-bold text-white/95">Accredited FABAMSSA Delegates, Faculty of Basic Medical Sciences</p>
               <p className="mt-0.5 text-[11px] text-white/75">University of Port Harcourt, Abuja Campus</p>
             </div>
           </motion.div>

@@ -132,7 +132,7 @@ export const VoterDashboardView: React.FC<VoterDashboardViewProps> = ({
               {/* Header with Title & Badge */}
               <div className="flex flex-wrap items-center gap-3 mb-4">
                 <h2 className="text-xl sm:text-2xl font-bold text-[#003f93] tracking-tight">
-                  FABAMSSA GENERAL ELECTIONS 2026
+                  FABAMSSA DELEGATE ELECTIONS 2026
                 </h2>
                 {getStatusBadge()}
               </div>
@@ -145,7 +145,7 @@ export const VoterDashboardView: React.FC<VoterDashboardViewProps> = ({
                   </p>
                   <p className="text-base sm:text-lg text-[#131b2e] font-medium flex items-center gap-2">
                     <Calendar className="w-5 h-5 text-[#737785]" />
-                    4 Sept 2026
+                    10 Sept 2026
                   </p>
                 </div>
                 <div>
@@ -330,20 +330,20 @@ export const VoterDashboardView: React.FC<VoterDashboardViewProps> = ({
             
             <ul className="space-y-1">
               <li className="flex justify-between items-center py-2.5 border-b border-slate-100">
-                <span className="text-xs sm:text-sm text-[#424653]">Voter Registration</span>
-                <span className="text-xs sm:text-sm font-semibold text-[#131b2e]">4 Sep</span>
+                <span className="text-xs sm:text-sm text-[#424653]">Delegate Accreditation</span>
+                <span className="text-xs sm:text-sm font-semibold text-[#131b2e]">10 Sep</span>
               </li>
               <li className="flex justify-between items-center py-2.5 border-b border-slate-100">
-                <span className="text-xs sm:text-sm text-[#424653]">Accreditation</span>
-                <span className="text-xs sm:text-sm font-semibold text-[#131b2e]">4 Sep</span>
+                <span className="text-xs sm:text-sm text-[#424653]">Delegate Verification</span>
+                <span className="text-xs sm:text-sm font-semibold text-[#131b2e]">10 Sep</span>
               </li>
               <li className="flex justify-between items-center py-2.5 border-b border-slate-100 bg-[#F1F5F9] -mx-2 px-3 rounded-lg">
                 <span className="text-xs sm:text-sm text-[#003f93] font-bold">Election Day</span>
-                <span className="text-xs sm:text-sm font-bold text-[#003f93]">4 Sep</span>
+                <span className="text-xs sm:text-sm font-bold text-[#003f93]">10 Sep</span>
               </li>
               <li className="flex justify-between items-center py-2.5">
                 <span className="text-xs sm:text-sm text-[#424653]">Results Declaration</span>
-                <span className="text-xs sm:text-sm font-semibold text-[#131b2e]">4 Sep</span>
+                <span className="text-xs sm:text-sm font-semibold text-[#131b2e]">10 Sep</span>
               </li>
             </ul>
           </section>
