@@ -567,7 +567,7 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         voterPin: '',
         registeredAt: new Date().toISOString(),
         accreditationTime: undefined,
-        avatarUrl: `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`,
+        avatarUrl: undefined,
         verificationStatus: 'pending',
       };
 

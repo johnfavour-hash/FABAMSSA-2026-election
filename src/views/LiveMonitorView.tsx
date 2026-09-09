@@ -2,20 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useElection } from '../context/ElectionContext';
 import { BMSDepartment } from '../types';
 import { 
-  Users, 
-  Vote, 
-  TrendingUp, 
-  Calendar, 
-  Clock, 
   RotateCw, 
   ShieldCheck, 
-  Award, 
-  CheckCircle2, 
-  Info,
-  Activity,
+  CheckCircle2,
   Sparkles,
-  Search,
-  Filter
 } from 'lucide-react';
 
 interface LiveMonitorViewProps {
@@ -118,7 +108,7 @@ export const LiveMonitorView: React.FC<LiveMonitorViewProps> = ({
             {winner && (
               <>
                 <div className="absolute top-4 right-4 bg-[#003B82] text-white px-3 py-1 rounded-full text-[11px] font-bold flex items-center gap-1 shadow-sm">
-                  <span className="material-symbols-outlined text-[16px]">star</span>
+                  <Sparkles className="w-4 h-4" />
                   {isElectionLive ? 'Currently Leading' : 'Winner'}
                 </div>
 
@@ -227,11 +217,11 @@ export const LiveMonitorView: React.FC<LiveMonitorViewProps> = ({
               <h1 className="text-3xl sm:text-4xl font-bold tracking-[-0.03em] text-[#131b2e] mb-2">Live Election Monitor</h1>
               <div className="flex flex-wrap items-center gap-3">
                 <span className={`inline-flex items-center gap-1 rounded px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide ${isResultsCertified ? 'bg-[#003b82] text-white' : 'bg-[#fef3c7] text-[#92400e] border border-[#fcd34d]'}`}>
-                  <span className="material-symbols-outlined text-[14px]">check_circle</span>
+                  <CheckCircle2 className="w-3.5 h-3.5" />
                   {isElectionLive ? 'Live Results' : isResultsCertified ? 'Certified Results' : 'Monitoring Offline'}
                 </span>
                 <span className="text-sm text-[#424653] flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[16px]">history</span>
+                  <RotateCw className="w-4 h-4" />
                   {isElectionLive ? 'Vote totals are not final' : isResultsCertified ? 'Official final results' : 'The election is not currently live'}
                 </span>
               </div>
@@ -284,7 +274,7 @@ export const LiveMonitorView: React.FC<LiveMonitorViewProps> = ({
           <aside className="space-y-6">
             <div className="bg-white border border-[#c2c6d5] rounded-xl p-5 shadow-sm">
               <h3 className="mb-4 flex items-center gap-2 text-xl font-bold text-[#131b2e]">
-                <span className="material-symbols-outlined text-[#0055c2]">shield</span>
+                <ShieldCheck className="w-5 h-5 text-[#0055c2]" />
                 Live Election Status
               </h3>
 
@@ -299,7 +289,7 @@ export const LiveMonitorView: React.FC<LiveMonitorViewProps> = ({
                   'Final winners appear after certification.',
                 ].map((line) => (
                   <li key={line} className="flex items-start gap-2">
-                    <span className="material-symbols-outlined text-[#0055c2]">check</span>
+                    <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0 text-[#0055c2]" />
                     <span>{line}</span>
                   </li>
                 ))}

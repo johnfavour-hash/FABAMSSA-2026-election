@@ -89,3 +89,22 @@ img {
   background: #737785;
 }
 
+/* Lucide icon visibility fix — force SVG stroke & size */
+svg[class*="lucide-"],
+svg.lucide {
+  display: inline-block;
+  flex-shrink: 0;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  vertical-align: middle;
+}
+
+svg[class*="lucide-"][width="0"],
+svg.lucide[width="0"] { width: 1em; }
+
+svg[class*="lucide-"][height="0"],
+svg.lucide[height="0"] { height: 1em; }
+

@@ -22,28 +22,40 @@ export const Header: React.FC<HeaderProps> = ({
   const { currentVoter, logoutVoter, isAdminLoggedIn, logoutAdmin } = useElection();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
-  const navLinks = [
-    ...(currentVoter ? [{ id: 'dashboard', label: 'Dashboard', action: () => setCurrentView('dashboard') }] : []),
-    { id: 'elections', label: 'Elections', action: () => setCurrentView('elections') },
-    { id: 'eligibility', label: 'Eligibility', action: () => setCurrentView('eligibility') },
-    { id: 'live-monitor', label: 'Live Monitor', action: () => setCurrentView('live-monitor') },
-    { id: 'results', label: 'Results', action: () => setCurrentView('results') },
-    { id: 'guide', label: 'Guide', action: onOpenGuide },
-    { 
-      id: 'about', 
-      label: 'About', 
-      action: () => {
-        if (currentView !== 'home') {
-          setCurrentView('home');
-          setTimeout(() => {
-            document.getElementById('bamssa-about-section')?.scrollIntoView({ behavior: 'smooth' });
-          }, 100);
-        } else {
-          document.getElementById('bamssa-about-section')?.scrollIntoView({ behavior: 'smooth' });
-        }
-      } 
-    },
-  ];
+  const getInitials = (name: string): string => {
+    const parts = name.trim().split(/\s+/).filter(Boolean);
+    if (parts.length === 0) return 'U';
+    if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+  };
+
+  const navLinks = currentVoter
+    ? [
+        { id: 'dashboard', label: 'Dashboard', action: () => setCurrentView('dashboard') },
+        { id: 'live-monitor', label: 'Live Monitor', action: () => setCurrentView('live-monitor') },
+        { id: 'results', label: 'Results', action: () => setCurrentView('results') },
+      ]
+    : [
+        { id: 'elections', label: 'Elections', action: () => setCurrentView('elections') },
+        { id: 'eligibility', label: 'Eligibility', action: () => setCurrentView('eligibility') },
+        { id: 'live-monitor', label: 'Live Monitor', action: () => setCurrentView('live-monitor') },
+        { id: 'results', label: 'Results', action: () => setCurrentView('results') },
+        { id: 'guide', label: 'Guide', action: onOpenGuide },
+        {
+          id: 'about',
+          label: 'About',
+          action: () => {
+            if (currentView !== 'home') {
+              setCurrentView('home');
+              setTimeout(() => {
+                document.getElementById('bamssa-about-section')?.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            } else {
+              document.getElementById('bamssa-about-section')?.scrollIntoView({ behavior: 'smooth' });
+            }
+          },
+        },
+      ];
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#dfe7ff] bg-white/90 backdrop-blur-xl shadow-[0_1px_0_rgba(15,23,42,0.04)]">
@@ -121,15 +133,10 @@ export const Header: React.FC<HeaderProps> = ({
                   <p className="text-[10px] text-[#424653] sm:text-[11px]">Voter</p>
                 </div>
 
-                <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-[#c2c6d5] bg-[#eaedff] shadow-sm ring-2 ring-white transition-colors group-hover:border-[#003f93] sm:h-10 sm:w-10">
-                  <img
-                    alt="Student Profile Avatar"
-                    className="h-full w-full object-cover"
-                    src={
-                      currentVoter.avatarUrl ||
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuDWlMIrte2-MY7oXEDW1oStZ78EmWlv4m3sSYLK3jxk6iviAh2APlIjBtH6qRbIpEZuT48yc96koIrkawgTaEmX4tiYmwYAE1WFNKaPiAmfJlEQ9_QZhqehvPio0EWIPvVU6wpj7NW74lSnOieXvHoj4ngQ8y-kwhUZyHs5XAVoLHIY8-8YRw0w5zo3nZcknPHLHndesYlIWEIbhAkh9jcbjgXiTvEtCkKmt7bZ7kLtalKhKgajSBR'
-                    }
-                  />
+                <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-[#003f93]/20 bg-gradient-to-br from-[#003f93] to-[#0055c2] shadow-sm ring-2 ring-white transition-transform group-hover:scale-105 sm:h-10 sm:w-10">
+                  <span className="text-[11px] font-extrabold text-white tracking-wide select-none sm:text-xs">
+                    {getInitials(currentVoter.fullName)}
+                  </span>
                 </div>
               </button>
 
