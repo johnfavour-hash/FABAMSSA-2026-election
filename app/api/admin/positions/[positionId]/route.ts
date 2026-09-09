@@ -12,6 +12,8 @@ export async function DELETE(request: Request, context: { params: Promise<{ posi
     if (existing.error || !existing.data) return NextResponse.json({ success: false, message: 'Position not found.' }, { status: 404 });
     const candidates = await supabase.from('candidates').select('id').eq('position_id', positionId).limit(1);
     if (candidates.data?.length) return NextResponse.json({ success: false, message: 'Remove all candidates from this position before deleting it.' }, { status: 409 });
+    // Remove any position_reviews row first to satisfy the foreign key constraint
+    await supabase.from('position_reviews').delete().eq('position_id', positionId);
     const result = await supabase.from('positions').delete().eq('id', positionId);
     if (result.error) return NextResponse.json({ success: false, message: 'Position could not be deleted.' }, { status: 503 });
     await writeAuditLog('Position deleted', 'ELECO Administrator', 'ADMIN', `Election office removed: ${positionId}.`);
