@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useElection } from '../context/ElectionContext';
 import { Voter } from '../types';
 import { 
@@ -15,6 +15,9 @@ import {
   Vote,
   Search,
   LogIn,
+  Key,
+  Copy,
+  CheckCircle2,
 } from 'lucide-react';
 
 interface AccreditationStatusViewProps {
@@ -49,6 +52,9 @@ export const AccreditationStatusView: React.FC<AccreditationStatusViewProps> = (
   const voterName = liveVoter.fullName;
   const matricNo = liveVoter.matricNumber;
   const level = liveVoter.level;
+  const voterPin = liveVoter.voterPin || '';
+  const hasPin = Boolean(voterPin);
+  const [copiedPin, setCopiedPin] = useState(false);
   const submittedOn = liveVoter.registeredAt
     ? new Date(liveVoter.registeredAt).toLocaleString('en-NG', { dateStyle: 'medium', timeStyle: 'short' })
     : 'Recently submitted';
@@ -111,6 +117,69 @@ export const AccreditationStatusView: React.FC<AccreditationStatusViewProps> = (
                 <span>●</span> {statusHeading}
               </h2>
               <p className="text-sm sm:text-base text-[#424653] max-w-lg leading-relaxed">{statusMessage}</p>
+
+              {/* VOTING PIN CARD — shown only when approved & pin available */}
+              {isAccredited && hasPin && (
+                <div className="mt-8 w-full max-w-md mx-auto bg-gradient-to-br from-[#003f93] to-[#0055c2] rounded-2xl p-6 sm:p-7 text-white shadow-[0_16px_40px_rgba(0,63,147,0.22)] border border-white/10">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <Key className="w-5 h-5 text-[#ffd966]" />
+                      <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/80">
+                        Your Official Voting PIN
+                      </span>
+                    </div>
+                    <span className="inline-flex items-center gap-1.5 bg-[#dcfce7]/15 text-[#dcfce7] text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-[#dcfce7]/30">
+                      <CheckCircle2 className="w-3 h-3" /> Ready
+                    </span>
+                  </div>
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-white/10 mb-3">
+                    <div className="text-4xl sm:text-5xl font-black tracking-[0.45em] text-center text-white font-mono select-all">
+                      {voterPin}
+                    </div>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
+                    <p className="text-[11px] sm:text-xs text-white/80 leading-relaxed text-center sm:text-left">
+                      Use this 4-digit PIN together with your <strong>Matric No.</strong> to sign in to the Ballot Booth on Election Day.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard?.writeText(voterPin);
+                        setCopiedPin(true);
+                        window.setTimeout(() => setCopiedPin(false), 1800);
+                      }}
+                      className="shrink-0 inline-flex items-center gap-1.5 bg-white text-[#003f93] hover:bg-[#ffd966] hover:text-[#001944] transition-colors px-3.5 py-2 rounded-lg text-[11px] font-bold shadow-sm cursor-pointer"
+                    >
+                      {copiedPin ? (
+                        <>
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          Copied!
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          Copy PIN
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* INFO CALLOUT: How to retrieve PIN when approved */}
+              {!isAccredited && !isRejected && (
+                <div className="mt-6 w-full max-w-lg mx-auto p-4 bg-[#FFF8E1] border border-[#FFE082] rounded-xl flex items-start gap-3 text-left">
+                  <Search className="w-5 h-5 text-[#B26A00] shrink-0 mt-0.5" />
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold text-[#7A4600]">
+                      When your accreditation is approved, a 4-digit voting PIN will be generated for you.
+                    </p>
+                    <p className="text-[11px] text-[#7A4600]/90 leading-relaxed">
+                      Return here to view or copy it, or at any time tap the <strong>Check Eligibility</strong> button, enter your Matric No., and your PIN will be displayed instantly.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Accreditation Journey */}
@@ -229,6 +298,48 @@ export const AccreditationStatusView: React.FC<AccreditationStatusViewProps> = (
                     <Eye className="w-4 h-4 text-[#737785]" />
                   </div>
                 </li>
+                <li>
+                  <span className="text-xs font-semibold text-[#424653] block mb-1">
+                    Voting PIN
+                  </span>
+                  {isAccredited && hasPin ? (
+                    <div className="flex items-center justify-between p-3 bg-gradient-to-r from-[#003f93] to-[#0055c2] rounded-lg border border-[#003f93]/30 shadow-sm">
+                      <div className="flex items-center gap-2">
+                        <Key className="w-4 h-4 text-[#ffd966]" />
+                        <span className="text-lg font-black tracking-[0.4em] text-white font-mono">{voterPin}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard?.writeText(voterPin);
+                          setCopiedPin(true);
+                          window.setTimeout(() => setCopiedPin(false), 1800);
+                        }}
+                        className="shrink-0 inline-flex items-center gap-1 text-white/80 hover:text-white transition-colors text-[10px] font-bold cursor-pointer"
+                        aria-label="Copy voting PIN"
+                      >
+                        {copiedPin ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between p-3 bg-[#f2f3ff] rounded-lg border border-dashed border-[#d2d9f4]">
+                      <div className="flex items-center gap-2">
+                        <Key className="w-4 h-4 text-[#737785]" />
+                        <span className="text-xs font-medium text-[#737785]">
+                          {isRejected ? 'PIN unavailable (rejected)' : 'Awaiting accreditation'}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={onNavigateToEligibility}
+                        className="shrink-0 inline-flex items-center gap-1 text-[#003f93] hover:text-[#002f70] transition-colors text-[10px] font-bold cursor-pointer"
+                      >
+                        <Search className="w-3.5 h-3.5" />
+                        Check Eligibility
+                      </button>
+                    </div>
+                  )}
+                </li>
               </ul>
             </div>
 
@@ -267,9 +378,9 @@ export const AccreditationStatusView: React.FC<AccreditationStatusViewProps> = (
                     3
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-[#131b2e] mb-0.5">Voting Eligibility</h4>
+                    <h4 className="text-xs font-bold text-[#131b2e] mb-0.5">Voting Eligibility &amp; PIN</h4>
                     <p className="text-xs text-[#424653] leading-relaxed">
-                      Once approved, you will gain access to the digital ballot on election day.
+                      Once approved, a unique 4-digit voting PIN will be generated for you. Open <strong>Check Eligibility</strong> and enter your Matric No. to view or copy your PIN, then sign in to the digital ballot on election day.
                     </p>
                   </div>
                 </div>
