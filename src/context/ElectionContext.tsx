@@ -7,6 +7,7 @@ interface ElectionContextType {
   endTime: string | null;
   durationMinutes: number;
   resultsStatus: ResultsStatus;
+
   publishedAt: string | null;
   certifiedAt: string | null;
   publishResults: () => Promise<{ success: boolean; message?: string }>;
@@ -15,7 +16,7 @@ interface ElectionContextType {
   electionStatus: ElectionStatus;
   setStatus: (status: ElectionStatus) => void;
   setElectionStatus: (status: ElectionStatus) => void;
-    setElectionDuration: (durationMinutes: number) => Promise<{ success: boolean; message?: string }>;
+  setElectionDuration: (durationMinutes: number) => Promise<{ success: boolean; message?: string }>;
   positions: ElectionPosition[];
   candidates: Candidate[];
   voters: Voter[];
@@ -30,7 +31,7 @@ interface ElectionContextType {
   adminEmail: string;
   adminAvatarUrl: string | null;
   updateAdminProfile: (name: string, avatarUrl: string | null) => Promise<{ success: boolean; message?: string }>;
-  
+
   // Actions
   loginVoter: (matricNumber: string, pin: string) => Promise<{ success: boolean; message: string; voter?: Voter }>;
   logoutVoter: () => void;
@@ -41,7 +42,7 @@ interface ElectionContextType {
   accreditVoter: (matricNumber: string) => Promise<{ success: boolean; message: string; pin?: string }>;
   rejectVoter: (matricNumber: string, reason?: string) => Promise<{ success: boolean; message: string }>;
   castBallot: (votes: Record<string, string>) => Promise<{ success: boolean; receiptHash: string; message: string }>;
-  
+
   // Admin Controls
   addCandidate: (candidate: Omit<Candidate, 'id' | 'votesCount' | 'approvedByEleco'>) => Promise<void>;
   addPosition: (position: Omit<ElectionPosition, 'id' | 'order'>) => Promise<void>;
@@ -51,7 +52,7 @@ interface ElectionContextType {
   deletePosition: (id: string) => Promise<{ success: boolean; message?: string }>;
   deleteVoter: (id: string) => Promise<{ success: boolean; message?: string }>;
   resetElectionData: () => Promise<{ success: boolean; message?: string }>;
-  
+
   // Computed
   totalEligible: number;
   totalAccredited: number;
@@ -274,9 +275,9 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const setStatus = async (newStatus: ElectionStatus) => {
     try {
       const response = await adminFetch(`${API_BASE}/admin/set-status`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: newStatus }),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
       });
       const payload = await response.json();
       if (!response.ok || !payload.success) return;
@@ -399,7 +400,7 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       if (!response.ok || !payload.session) return false;
       setAdminSession(payload.session);
       setAdminName(payload.adminName || 'Administrator');
-        setAdminEmail(payload.adminEmail || '');
+      setAdminEmail(payload.adminEmail || '');
       setAdminAvatarUrl(payload.adminAvatarUrl || null);
       setIsAdminLoggedIn(true);
       return true;
@@ -412,7 +413,7 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setIsAdminLoggedIn(false);
     setAdminSession(null);
     setAdminName('Administrator');
-      setAdminEmail('');
+    setAdminEmail('');
     setAdminAvatarUrl(null);
   };
 
@@ -452,8 +453,8 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const adminFetch = (url: string, options: RequestInit = {}) => fetch(
     url.startsWith('http') ? url : `${API_BASE}${url.startsWith('/api') ? url.slice(4) : url}`,
     {
-    ...options,
-    headers: { ...(options.headers || {}), 'X-Admin-Session': adminSession || '' },
+      ...options,
+      headers: { ...(options.headers || {}), 'X-Admin-Session': adminSession || '' },
     },
   );
 
@@ -472,31 +473,31 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     try {
       const response = await adminFetch(`${API_BASE}/voters/accredit`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ matricNumber: trimmed }),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ matricNumber: trimmed }),
       });
       const payload = await response.json();
       if (!response.ok || !payload.success) return { success: false, message: payload.message || 'Unable to accredit voter.' };
-          const finalPin = payload.pin || generatedPin;
-          setVoters((prev) => prev.map((v) =>
-            v.matricNumber?.toUpperCase() === trimmed
-              ? {
-                  ...v,
-                  isAccredited: true,
-                  isEligible: true,
-                  verificationStatus: 'approved',
-                  voterPin: finalPin,
-                  accreditationTime: payload.accreditationTime || v.accreditationTime || new Date().toISOString(),
-                }
-              : v,
-          ));
-          addAuditLog(
-            'Student Voter Accredited',
-            `ELECO Registry (${existingVoter.department})`,
-            'ACCREDITATION',
-            `Voter PIN generated for Matric: ${existingVoter.matricNumber} | PIN: ${finalPin}`
-          );
+      const finalPin = payload.pin || generatedPin;
+      setVoters((prev) => prev.map((v) =>
+        v.matricNumber?.toUpperCase() === trimmed
+          ? {
+            ...v,
+            isAccredited: true,
+            isEligible: true,
+            verificationStatus: 'approved',
+            voterPin: finalPin,
+            accreditationTime: payload.accreditationTime || v.accreditationTime || new Date().toISOString(),
+          }
+          : v,
+      ));
+      addAuditLog(
+        'Student Voter Accredited',
+        `ELECO Registry (${existingVoter.department})`,
+        'ACCREDITATION',
+        `Voter PIN generated for Matric: ${existingVoter.matricNumber} | PIN: ${finalPin}`
+      );
       return { success: true, message: 'Accreditation verified successfully! Keep your 4-digit PIN secure.', pin: finalPin };
     } catch {
       return { success: false, message: 'Unable to reach the election server.' };
@@ -512,23 +513,23 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     try {
       const response = await adminFetch(`${API_BASE}/voters/reject`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ matricNumber: trimmed, reason: reason || 'Accreditation credentials non-compliant with BMS student registry.' }),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ matricNumber: trimmed, reason: reason || 'Accreditation credentials non-compliant with BMS student registry.' }),
       });
       const payload = await response.json();
       if (!response.ok || !payload.success) return { success: false, message: payload.message || 'Unable to reject voter.' };
-          setVoters((prev) => prev.map((v) =>
-            v.matricNumber?.toUpperCase() === trimmed
-              ? { ...v, isEligible: false, isAccredited: false, verificationStatus: 'rejected', rejectionReason: reason || payload.reason || 'Accreditation credentials non-compliant with BMS student registry.' }
-              : v,
-          ));
-          addAuditLog(
-            'Student Verification Rejected',
-            'ELECO Accreditation Officer',
-            'ACCREDITATION',
-            `Matric: ${existingVoter.matricNumber} rejected. Reason: ${reason || 'Incomplete credentials'}`
-          );
+      setVoters((prev) => prev.map((v) =>
+        v.matricNumber?.toUpperCase() === trimmed
+          ? { ...v, isEligible: false, isAccredited: false, verificationStatus: 'rejected', rejectionReason: reason || payload.reason || 'Accreditation credentials non-compliant with BMS student registry.' }
+          : v,
+      ));
+      addAuditLog(
+        'Student Verification Rejected',
+        'ELECO Accreditation Officer',
+        'ACCREDITATION',
+        `Matric: ${existingVoter.matricNumber} rejected. Reason: ${reason || 'Incomplete credentials'}`
+      );
       return { success: true, message: 'Voter submission marked as rejected.' };
     } catch {
       return { success: false, message: 'Unable to reach the election server.' };
@@ -711,9 +712,9 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     );
     try {
       const response = await adminFetch(`${API_BASE}/admin/adjust-candidate-votes`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ candidateId: id, delta: safeDelta }),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ candidateId: id, delta: safeDelta }),
       });
       const payload = await response.json();
       if (!response.ok || !payload.success) {
@@ -821,7 +822,7 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         electionStatus: status,
         setStatus,
         setElectionStatus,
-          setElectionDuration,
+        setElectionDuration,
         positions,
         candidates,
         voters,
@@ -831,9 +832,9 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         isAdminLoggedIn,
         isAdminAuthenticated: isAdminLoggedIn,
         adminName,
-          adminEmail,
-          commissionMembers,
-          updateCommissionMembers,
+        adminEmail,
+        commissionMembers,
+        updateCommissionMembers,
         adminAvatarUrl,
         updateAdminProfile,
         loginVoter,

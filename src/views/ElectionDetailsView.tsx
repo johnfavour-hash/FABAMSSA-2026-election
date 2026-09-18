@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useElection } from '../context/ElectionContext';
-import { 
-  Building2, 
-  FileText, 
-  ShieldCheck, 
-  Vote, 
-  BarChart3, 
-  Users, 
-  CheckSquare, 
-  CheckCircle2, 
+import {
+  Building2,
+  FileText,
+  ShieldCheck,
+  Vote,
+  BarChart3,
+  Users,
+  CheckSquare,
+  CheckCircle2,
   ArrowRight,
   Info,
   Award,
@@ -80,7 +80,7 @@ export const ElectionDetailsView: React.FC<ElectionDetailsViewProps> = ({
       {/* Main Content Area */}
       <div className="flex-grow w-full max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-12 space-y-12">
         {/* 1. Election Identity Header Card */}
-        <section 
+        <section
           id="election-header-card"
           className="bg-white border border-[#c2c6d5]/70 rounded-3xl p-6 md:p-10 shadow-xs relative overflow-hidden transition-all"
         >
@@ -148,7 +148,7 @@ export const ElectionDetailsView: React.FC<ElectionDetailsViewProps> = ({
                 Date
               </p>
               <p className="text-base md:text-lg font-bold text-[#131b2e]">
-                10 September 2026
+                18 September 2026
               </p>
             </div>
             <div>
@@ -164,7 +164,7 @@ export const ElectionDetailsView: React.FC<ElectionDetailsViewProps> = ({
                 Hours
               </p>
               <p className="text-base md:text-lg font-bold text-[#131b2e]">
-                8:00 AM – 4:00 PM WAT
+                1:00 PM – 2:00 PM WAT
               </p>
             </div>
           </div>
@@ -193,7 +193,7 @@ export const ElectionDetailsView: React.FC<ElectionDetailsViewProps> = ({
                 Delegate Accreditation
               </h3>
               <p className="text-sm text-[#424653]">
-                Sep 10, 2026
+                Sep 18, 2026
               </p>
             </div>
 
@@ -204,7 +204,7 @@ export const ElectionDetailsView: React.FC<ElectionDetailsViewProps> = ({
                 Delegate Verification
               </h3>
               <p className="text-sm text-[#424653]">
-                Sep 10, 2026
+                Sep 18, 2026
               </p>
             </div>
 
@@ -216,7 +216,7 @@ export const ElectionDetailsView: React.FC<ElectionDetailsViewProps> = ({
                 Voting Day
               </h3>
               <p className="text-sm text-white/80 relative z-10">
-                Sep 10, 8 AM - 4 PM
+                Sep 18, 1 PM - 2 PM
               </p>
             </div>
 
@@ -227,7 +227,7 @@ export const ElectionDetailsView: React.FC<ElectionDetailsViewProps> = ({
                 Results
               </h3>
               <p className="text-sm text-[#424653]">
-                Sep 10, 5 PM
+                Sep 18
               </p>
             </div>
           </div>
@@ -253,17 +253,15 @@ export const ElectionDetailsView: React.FC<ElectionDetailsViewProps> = ({
                 <button
                   key={position.id}
                   onClick={() => setSelectedPosition(isSelected ? null : position.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer select-none text-left flex items-center gap-1.5 ${
-                    isSelected
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer select-none text-left flex items-center gap-1.5 ${isSelected
                       ? 'bg-[#003f93] text-white border border-[#003f93] shadow-xs'
                       : 'bg-[#f2f3ff] border border-[#c2c6d5]/70 text-[#131b2e] hover:border-[#0055c2] hover:bg-[#eaedff]'
-                  }`}
+                    }`}
                 >
                   <span>{position.title}</span>
                   {matchingCandidates.length > 0 && (
-                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                      isSelected ? 'bg-white/20 text-white' : 'bg-[#e2e7ff] text-[#003f93]'
-                    }`}>
+                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-[#e2e7ff] text-[#003f93]'
+                      }`}>
                       {matchingCandidates.length}
                     </span>
                   )}
@@ -449,7 +447,7 @@ export const ElectionDetailsView: React.FC<ElectionDetailsViewProps> = ({
           {/* Final CTA in BAMSSA Blue */}
           <div className="w-full bg-[#0055c2] rounded-2xl p-8 md:p-12 text-center flex flex-col items-center justify-center relative overflow-hidden shadow-sm">
             {/* SVG Dot Pattern */}
-            <div 
+            <div
               className="absolute inset-0 opacity-15 pointer-events-none"
               style={{
                 backgroundImage: `radial-gradient(circle, #ffffff 1.5px, transparent 1.5px)`,

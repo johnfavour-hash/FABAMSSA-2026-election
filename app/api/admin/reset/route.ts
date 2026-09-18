@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       status: 'STANDBY',
       start_time: null,
       end_time: null,
-      duration_minutes: 120,
+      duration_minutes: 60,
       results_status: 'DRAFT',
       published_at: null,
       published_by: null,

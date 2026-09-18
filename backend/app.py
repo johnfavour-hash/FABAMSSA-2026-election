@@ -38,7 +38,7 @@ def disable_api_caching(response: Any) -> Any:
         response.headers['Cache-Control'] = 'no-store, max-age=0'
     return response
 
-DEFAULT_ELECTION_DURATION_MINUTES = 120
+DEFAULT_ELECTION_DURATION_MINUTES = 60
 ALLOWED_DEPARTMENTS = {'Anatomy', 'Psychology'}
 ALLOWED_LEVELS = {'100L', '200L', '300L'}
 

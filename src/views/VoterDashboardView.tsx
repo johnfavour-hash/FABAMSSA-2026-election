@@ -145,7 +145,7 @@ export const VoterDashboardView: React.FC<VoterDashboardViewProps> = ({
                   </p>
                   <p className="text-base sm:text-lg text-[#131b2e] font-medium flex items-center gap-2">
                     <Calendar className="w-5 h-5 text-[#737785]" />
-                    10 Sept 2026
+                    18 Sept 2026
                   </p>
                 </div>
                 <div>
@@ -154,7 +154,7 @@ export const VoterDashboardView: React.FC<VoterDashboardViewProps> = ({
                   </p>
                   <p className="text-base sm:text-lg text-[#131b2e] font-medium flex items-center gap-2">
                     <Clock className="w-5 h-5 text-[#737785]" />
-                    8:00 AM – 4:00 PM
+                    1:00 PM – 2:00 PM
                   </p>
                 </div>
               </div>

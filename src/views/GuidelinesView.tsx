@@ -169,7 +169,7 @@ export const GuidelinesView: React.FC<GuidelinesViewProps> = ({
             </div>
             <div className="flex items-start gap-3">
               <span className="w-6 h-6 rounded-full bg-[#eaedff] text-[#0055c2] text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
-              <p><strong>Campaign Moratorium on Election Day:</strong> All active digital and physical campaigns must cease precisely 12 hours prior to the opening of polls at 08:00 AM WAT.</p>
+              <p><strong>Campaign Moratorium on Election Day:</strong> All active digital and physical campaigns must cease precisely 12 hours prior to the opening of polls at 01:00 PM WAT.</p>
             </div>
           </div>
         </div>
@@ -192,11 +192,10 @@ export const GuidelinesView: React.FC<GuidelinesViewProps> = ({
             {elecoCommittee.map((member) => (
               <div
                 key={member.name}
-                className={`rounded-xl border p-4 flex flex-col gap-1 ${
-                  member.highlight
+                className={`rounded-xl border p-4 flex flex-col gap-1 ${member.highlight
                     ? 'bg-[#eaedff] border-[#0055c2]/30'
                     : 'bg-[#faf8ff] border-[#c2c6d5]/70'
-                }`}
+                  }`}
               >
                 <p className={`text-sm font-bold ${member.highlight ? 'text-[#003f93]' : 'text-[#131b2e]'}`}>
                   {member.name}

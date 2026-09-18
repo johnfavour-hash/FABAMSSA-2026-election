@@ -678,7 +678,7 @@ export const VotingBoothView: React.FC<VotingBoothViewProps> = ({
                     VOTING IS LIVE
                   </span>
                 </h1>
-                <p className="text-sm text-[#424653]">10 September 2026</p>
+                <p className="text-sm text-[#424653]">18 September 2026</p>
               </div>
 
               {/* Progress Bar Header */}

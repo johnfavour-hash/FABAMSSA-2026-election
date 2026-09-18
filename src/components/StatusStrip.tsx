@@ -65,7 +65,7 @@ export const StatusStrip: React.FC<StatusStripProps> = () => {
 
   return (
     <motion.section
-      id="bamssa-status-strip" 
+      id="bamssa-status-strip"
       className="border-y border-[#d2d9f4] bg-[radial-gradient(circle_at_top,_#f4f8ff,_#edf4fc_50%,_#edf3ff)] px-4 py-8 sm:px-6 sm:py-10 lg:px-8"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
@@ -103,7 +103,7 @@ export const StatusStrip: React.FC<StatusStripProps> = () => {
 
           <div className="rounded-2xl border border-[#c2c6d5]/70 bg-white px-5 py-7 text-center shadow-[0_12px_22px_rgba(15,23,42,0.04)] transition-colors hover:border-[#0055c2]/40 sm:px-6">
             <div className="mb-3 text-2xl font-bold leading-none tracking-[-0.04em] text-[#003f93] sm:text-3xl md:text-[32px]">
-              10 Sept, 2026
+              18 Sept, 2026
             </div>
             <div className="text-sm font-medium text-[#424653] md:text-base">
               Election Day

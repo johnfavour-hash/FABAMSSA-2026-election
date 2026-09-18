@@ -3,18 +3,18 @@ import { compressImageFile } from '../utils/imageCompression';
 import * as XLSX from 'xlsx';
 import { useElection } from '../context/ElectionContext';
 import { ElectionStatus, BMSDepartment, AcademicLevel, Candidate, ElectionPosition, Voter } from '../types';
-import { 
-  ShieldCheck, 
-  Settings, 
-  Users, 
-  Vote, 
-  Lock, 
-  FileSpreadsheet, 
-  Plus, 
-  RotateCcw, 
-  Search, 
-  CheckCircle2, 
-  AlertCircle, 
+import {
+  ShieldCheck,
+  Settings,
+  Users,
+  Vote,
+  Lock,
+  FileSpreadsheet,
+  Plus,
+  RotateCcw,
+  Search,
+  CheckCircle2,
+  AlertCircle,
   LogOut,
   PlayCircle,
   Download,
@@ -63,7 +63,7 @@ interface AdminPortalViewProps {
   onOpenGuide: () => void;
 }
 
-type AdminTab = 
+type AdminTab =
   | 'dashboard'
   | 'verification'
   | 'voters'
@@ -459,8 +459,8 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
         const statusText = v.verificationStatus === 'rejected'
           ? 'Rejected'
           : v.isAccredited
-          ? 'Approved'
-          : 'Pending Review';
+            ? 'Approved'
+            : 'Pending Review';
         return `"${v.matricNumber}","${v.fullName}","${v.email || ''}","${v.department}","${v.level}","${v.phone || ''}","${v.registeredAt || 'Oct 12, 2026'}","${statusText}"`;
       })
       .join('\n');
@@ -474,7 +474,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
   };
 
   const filteredVoters = voters.filter((v) => {
-    const matchesSearch = 
+    const matchesSearch =
       v.fullName.toLowerCase().includes(voterSearch.toLowerCase()) ||
       v.matricNumber.toLowerCase().includes(voterSearch.toLowerCase()) ||
       v.department.toLowerCase().includes(voterSearch.toLowerCase());
@@ -652,6 +652,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
     } catch {
       showToast('Could not process the image. Please try a different file.', 'error');
     }
+
   };
 
   const exportAuditCSV = () => {
@@ -721,12 +722,11 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
 
   return (
     <div className="flex bg-[#F8FAFC] min-h-screen text-[#131b2e] antialiased font-sans">
-      
+
       {/* SideNavBar (Desktop & Mobile Drawer) */}
-      <aside 
-        className={`${isSidebarCollapsed ? 'w-[80px]' : 'w-[270px]'} bg-[#faf8ff] border-r border-[#c2c6d5] flex flex-col py-5 px-3 fixed left-0 top-0 h-screen z-50 transition-all duration-300 lg:translate-x-0 ${
-          mobileNavOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
-        }`}
+      <aside
+        className={`${isSidebarCollapsed ? 'w-[80px]' : 'w-[270px]'} bg-[#faf8ff] border-r border-[#c2c6d5] flex flex-col py-5 px-3 fixed left-0 top-0 h-screen z-50 transition-all duration-300 lg:translate-x-0 ${mobileNavOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
+          }`}
       >
         {/* Brand Header */}
         <div className={`mb-6 flex items-center ${isSidebarCollapsed ? 'justify-center' : 'justify-between px-3'}`}>
@@ -765,11 +765,10 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                     setActiveTab(item.id);
                     setMobileNavOpen(false);
                   }}
-                  className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center p-2.5' : 'gap-3 px-3.5 py-2.5'} rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                    isActive
+                  className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center p-2.5' : 'gap-3 px-3.5 py-2.5'} rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${isActive
                       ? 'bg-[#d9e2ff] text-[#003f93] shadow-xs'
                       : 'text-[#424653] hover:bg-[#eaedff] hover:text-[#131b2e]'
-                  }`}
+                    }`}
                   title={isSidebarCollapsed ? item.label : undefined}
                 >
                   <Icon className={`w-4 h-4 ${isActive ? 'text-[#003f93]' : 'text-[#737785]'}`} />
@@ -788,11 +787,10 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
               setActiveTab('settings');
               setMobileNavOpen(false);
             }}
-            className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center p-2' : 'gap-3 px-3.5 py-2'} rounded-xl text-xs font-bold transition-colors text-left cursor-pointer ${
-              activeTab === 'settings'
+            className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center p-2' : 'gap-3 px-3.5 py-2'} rounded-xl text-xs font-bold transition-colors text-left cursor-pointer ${activeTab === 'settings'
                 ? 'bg-[#d9e2ff] text-[#003f93]'
                 : 'text-[#424653] hover:bg-[#eaedff]'
-            }`}
+              }`}
             title={isSidebarCollapsed ? 'Settings' : undefined}
           >
             <Settings className="w-4 h-4 text-[#737785]" />
@@ -808,7 +806,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
             <LogOut className="w-4 h-4" />
             {!isSidebarCollapsed && <span>Logout</span>}
           </button>
-          
+
           <button
             type="button"
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
@@ -823,7 +821,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
 
       {/* Backdrop for mobile */}
       {mobileNavOpen && (
-        <div 
+        <div
           onClick={() => setMobileNavOpen(false)}
           className="fixed inset-0 bg-black/40 z-40 lg:hidden"
         />
@@ -831,10 +829,10 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
 
       {/* Main Content Area */}
       <div className={`flex-1 min-h-screen flex flex-col transition-all duration-300 ${isSidebarCollapsed ? 'lg:ml-[80px]' : 'lg:ml-[270px]'}`}>
-        
+
         {/* TopAppBar */}
         <header className="bg-white border-b border-[#c2c6d5] sticky top-0 z-30 flex justify-between items-center px-4 sm:px-6 py-3 shadow-2xs">
-          
+
           <div className="flex items-center gap-3">
             {/* Mobile menu toggle */}
             <button
@@ -844,7 +842,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
             >
               <LayoutDashboard className="w-5 h-5" />
             </button>
-            
+
             {activeTab === 'verification' ? (
               <div className="flex items-center gap-2 text-xs font-semibold text-[#424653]">
                 <h2 className="text-base sm:text-lg font-bold text-[#003f93] hidden lg:block mr-2">
@@ -862,9 +860,8 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                 <button
                   type="button"
                   onClick={() => setSelectedReviewVoter(null)}
-                  className={`hover:text-[#003f93] transition-colors cursor-pointer ${
-                    !selectedReviewVoter ? 'text-[#003f93] font-bold' : ''
-                  }`}
+                  className={`hover:text-[#003f93] transition-colors cursor-pointer ${!selectedReviewVoter ? 'text-[#003f93] font-bold' : ''
+                    }`}
                 >
                   Verification
                 </button>
@@ -885,9 +882,8 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
           <div className="flex items-center gap-3 sm:gap-4">
             {/* Status Pill Badge */}
             <div className="flex items-center bg-[#F1F5F9] rounded-full px-3 py-1 border border-[#E2E8F0] select-none">
-              <span className={`w-2 h-2 rounded-full mr-2 ${
-                status === 'LIVE' ? 'bg-[#ba1a1a] animate-pulse' : 'bg-[#475569]'
-              }`}></span>
+              <span className={`w-2 h-2 rounded-full mr-2 ${status === 'LIVE' ? 'bg-[#ba1a1a] animate-pulse' : 'bg-[#475569]'
+                }`}></span>
               <span className="text-[11px] font-bold text-[#475569] uppercase tracking-wider">
                 {status === 'LIVE' ? 'LIVE' : status}
               </span>
@@ -895,18 +891,18 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
 
             {/* Icons */}
             <div className="hidden sm:flex items-center gap-2 text-[#424653]">
-              <button 
+              <button
                 type="button"
                 className="p-1.5 rounded-full hover:bg-[#f2f3ff] hover:text-[#003f93] transition-colors cursor-pointer"
                 title="Notifications"
               >
                 <Bell className="w-4 h-4" />
               </button>
-              <button 
+              <button
                 type="button"
                 className="p-1.5 rounded-full hover:bg-[#f2f3ff] hover:text-[#003f93] transition-colors cursor-pointer"
-                  title="Open admin guide"
-                  onClick={onOpenGuide}
+                title="Open admin guide"
+                onClick={onOpenGuide}
               >
                 <HelpCircle className="w-4 h-4" />
               </button>
@@ -933,7 +929,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
           {/* TAB 1: DASHBOARD (Matching the User Design Screenshot Exactly) */}
           {activeTab === 'dashboard' && (
             <div className="space-y-6">
-              
+
               {/* Welcome Area */}
               <div>
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-[#131b2e] tracking-tight">
@@ -946,14 +942,14 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
 
               {/* Dashboard Grid */}
               <div className="grid grid-cols-12 gap-6">
-                
+
                 {/* Left Column (8 of 12 cols on desktop) */}
                 <div className="col-span-12 lg:col-span-8 flex flex-col gap-6">
-                  
+
                   {/* Primary Election Status Card */}
                   <div className="bg-white/95 backdrop-blur-md rounded-2xl p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden border border-[#E2E8F0] shadow-xs">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-[#d9e2ff] opacity-25 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none" />
-                    
+
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-8 relative z-10">
                       <div>
                         <h2 className="text-xl sm:text-2xl font-bold text-[#131b2e] mb-1.5">
@@ -962,12 +958,12 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                         <p className="text-xs sm:text-sm text-[#424653] flex items-center gap-2 flex-wrap">
                           <span className="flex items-center gap-1">
                             <Calendar className="w-4 h-4 text-[#737785]" />
-                            <span>10 September 2026</span>
+                            <span>18 September 2026</span>
                           </span>
                           <span className="text-[#c2c6d5]">|</span>
                           <span className="flex items-center gap-1">
                             <Clock className="w-4 h-4 text-[#737785]" />
-                            <span>8:00 AM — 4:00 PM</span>
+                            <span>1:00 PM — 2:00 PM</span>
                           </span>
                         </p>
                       </div>
@@ -1002,7 +998,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
 
                   {/* Metric Grid (Bento Style) */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                    
+
                     {/* Card 1: Eligible Voters */}
                     <div className="bg-white/95 rounded-xl p-4 sm:p-5 flex flex-col border border-[#E2E8F0] shadow-xs">
                       <Users className="w-5 h-5 text-[#003f93] mb-3" />
@@ -1051,7 +1047,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                       <h3 className="text-base sm:text-lg font-bold text-[#131b2e]">
                         Voter Accreditation
                       </h3>
-                      <button 
+                      <button
                         type="button"
                         onClick={() => setActiveTab('verification')}
                         className="text-[#003f93] font-bold text-xs hover:underline flex items-center gap-1 cursor-pointer"
@@ -1093,7 +1089,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
 
                 {/* Right Column (4 of 12 cols on desktop) */}
                 <div className="col-span-12 lg:col-span-4 flex flex-col gap-6">
-                  
+
                   {/* Quick Actions */}
                   <div className="bg-white/95 rounded-2xl p-5 sm:p-6 border border-[#E2E8F0] shadow-xs space-y-3">
                     <h3 className="text-base font-bold text-[#131b2e]">
@@ -1125,7 +1121,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                     <h3 className="text-base font-bold text-[#131b2e] border-b border-[#c2c6d5]/50 pb-2.5">
                       Readiness Checklist
                     </h3>
-                    
+
                     <ul className="space-y-3">
                       <li className="flex items-start gap-2.5">
                         <CheckCircle className="w-5 h-5 text-[#003f93] shrink-0 mt-0.5" />
@@ -1180,8 +1176,8 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                       {status === 'LIVE' ? `${turnoutPercentage}%` : '—'}
                     </p>
                     <p className="text-xs text-[#737785]">
-                      {status === 'LIVE' 
-                        ? `${totalBallotsCast} ballots cast so far` 
+                      {status === 'LIVE'
+                        ? `${totalBallotsCast} ballots cast so far`
                         : 'Data will appear when voting begins.'}
                     </p>
                   </div>
@@ -1370,9 +1366,8 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                         </div>
 
                         {/* Image Container */}
-                        <div className={`bg-[#dae2fd]/40 flex items-center justify-center relative overflow-hidden transition-all ${
-                          isViewerFullscreen ? 'fixed inset-0 z-60 bg-black/80' : 'min-h-[320px] flex-1'
-                        }`}>
+                        <div className={`bg-[#dae2fd]/40 flex items-center justify-center relative overflow-hidden transition-all ${isViewerFullscreen ? 'fixed inset-0 z-60 bg-black/80' : 'min-h-[320px] flex-1'
+                          }`}>
                           {isViewerFullscreen && (
                             <button
                               type="button"
@@ -1482,327 +1477,323 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                 </div>
               ) : (
 
-              /* ─── VERIFICATION QUEUE (default view) ─── */
-              <div className="space-y-6">
-              
-              {/* Header Section */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-[#131b2e] tracking-tight">
-                    Voter Verification
-                  </h2>
-                  <p className="text-xs sm:text-sm text-[#424653] mt-1 max-w-2xl">
-                    Review registration submissions and accredit eligible delegates for the FABAMSSA Delegate Elections 2026.
-                  </p>
-                </div>
+                /* ─── VERIFICATION QUEUE (default view) ─── */
+                <div className="space-y-6">
 
-                <button
-                  type="button"
-                  onClick={exportVotersCSV}
-                  className="flex items-center gap-2 px-4 py-2 bg-white border border-[#c2c6d5] rounded-lg text-[#131b2e] text-xs font-bold hover:bg-[#f2f3ff] transition-colors shadow-2xs w-fit cursor-pointer"
-                >
-                  <Download className="w-4 h-4 text-[#003f93]" />
-                  <span>Export Records</span>
-                </button>
-              </div>
+                  {/* Header Section */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <h2 className="text-2xl sm:text-3xl font-extrabold text-[#131b2e] tracking-tight">
+                        Voter Verification
+                      </h2>
+                      <p className="text-xs sm:text-sm text-[#424653] mt-1 max-w-2xl">
+                        Review registration submissions and accredit eligible delegates for the FABAMSSA Delegate Elections 2026.
+                      </p>
+                    </div>
 
-              {/* Summary Cards (4 Cards Grid) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-                
-                {/* Pending Review */}
-                <div className="bg-white p-5 rounded-xl border border-[#c2c6d5] shadow-xs flex flex-col justify-between min-h-[110px]">
-                  <span className="text-xs font-semibold text-[#424653]">
-                    Pending Review
-                  </span>
-                  <span className="text-4xl sm:text-5xl font-extrabold text-[#92400E] leading-none mt-2">
-                    {displayPendingCount.toLocaleString()}
-                  </span>
-                </div>
-
-                {/* Approved */}
-                <div className="bg-white p-5 rounded-xl border border-[#c2c6d5] shadow-xs flex flex-col justify-between min-h-[110px]">
-                  <span className="text-xs font-semibold text-[#424653]">
-                    Approved
-                  </span>
-                  <span className="text-4xl sm:text-5xl font-extrabold text-[#003f93] leading-none mt-2">
-                    {displayApprovedCount.toLocaleString()}
-                  </span>
-                </div>
-
-                {/* Rejected */}
-                <div className="bg-white p-5 rounded-xl border border-[#c2c6d5] shadow-xs flex flex-col justify-between min-h-[110px]">
-                  <span className="text-xs font-semibold text-[#424653]">
-                    Rejected
-                  </span>
-                  <span className="text-4xl sm:text-5xl font-extrabold text-[#ba1a1a] leading-none mt-2">
-                    {displayRejectedCount.toLocaleString()}
-                  </span>
-                </div>
-
-                {/* Total Submissions */}
-                <div className="bg-white p-5 rounded-xl border border-[#c2c6d5] shadow-xs flex flex-col justify-between min-h-[110px]">
-                  <span className="text-xs font-semibold text-[#424653]">
-                    Total Submissions
-                  </span>
-                  <span className="text-4xl sm:text-5xl font-extrabold text-[#131b2e] leading-none mt-2">
-                    {displayTotalCount.toLocaleString()}
-                  </span>
-                </div>
-
-              </div>
-
-              {/* Data Canvas Container */}
-              <div className="bg-white rounded-xl border border-[#c2c6d5] shadow-xs overflow-hidden">
-                
-                {/* Tabs */}
-                <div className="flex border-b border-[#c2c6d5] px-4 sm:px-6 pt-2 bg-white overflow-x-auto">
-                  <button
-                    type="button"
-                    onClick={() => setVerifActiveTab('all')}
-                    className={`px-4 py-3 text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${
-                      verifActiveTab === 'all'
-                        ? 'text-[#003f93] border-b-2 border-[#003f93]'
-                        : 'text-[#424653] hover:text-[#003f93]'
-                    }`}
-                  >
-                    All ({displayTotalCount.toLocaleString()})
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setVerifActiveTab('pending')}
-                    className={`px-4 py-3 text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${
-                      verifActiveTab === 'pending'
-                        ? 'text-[#003f93] border-b-2 border-[#003f93]'
-                        : 'text-[#424653] hover:text-[#003f93]'
-                    }`}
-                  >
-                    Pending ({displayPendingCount.toLocaleString()})
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setVerifActiveTab('approved')}
-                    className={`px-4 py-3 text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${
-                      verifActiveTab === 'approved'
-                        ? 'text-[#003f93] border-b-2 border-[#003f93]'
-                        : 'text-[#424653] hover:text-[#003f93]'
-                    }`}
-                  >
-                    Approved ({displayApprovedCount.toLocaleString()})
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setVerifActiveTab('rejected')}
-                    className={`px-4 py-3 text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${
-                      verifActiveTab === 'rejected'
-                        ? 'text-[#003f93] border-b-2 border-[#003f93]'
-                        : 'text-[#424653] hover:text-[#003f93]'
-                    }`}
-                  >
-                    Rejected ({displayRejectedCount.toLocaleString()})
-                  </button>
-                </div>
-
-                {/* Filters */}
-                <div className="p-4 flex flex-wrap items-center gap-3 bg-[#eaedff]/30 border-b border-[#c2c6d5]">
-                  <div className="relative flex-1 min-w-[260px]">
-                    <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#737785]" />
-                    <input
-                      type="text"
-                      value={verifSearch}
-                      onChange={(e) => setVerifSearch(e.target.value)}
-                      placeholder="Search by name, matric number or email..."
-                      className="w-full pl-9 pr-3 py-2 bg-white border border-[#c2c6d5] rounded-lg text-xs font-medium text-[#131b2e] focus:border-[#003f93] focus:ring-2 focus:ring-[#003f93]/10 transition-all outline-hidden"
-                    />
-                  </div>
-
-                  <select
-                    value={verifLevelFilter}
-                    onChange={(e) => setVerifLevelFilter(e.target.value)}
-                    className="px-3 py-2 bg-white border border-[#c2c6d5] rounded-lg text-xs font-medium text-[#131b2e] focus:border-[#003f93] focus:ring-2 focus:ring-[#003f93]/10 transition-all cursor-pointer outline-hidden"
-                  >
-                    <option value="ALL">Level (All)</option>
-                    <option value="100L">100L</option>
-                    <option value="200L">200L</option>
-                    <option value="300L">300L</option>
-                  </select>
-
-                  <select
-                    value={verifDateFilter}
-                    onChange={(e) => setVerifDateFilter(e.target.value)}
-                    className="px-3 py-2 bg-white border border-[#c2c6d5] rounded-lg text-xs font-medium text-[#131b2e] focus:border-[#003f93] focus:ring-2 focus:ring-[#003f93]/10 transition-all cursor-pointer outline-hidden"
-                  >
-                    <option value="ALL">Registration Date</option>
-                    <option value="today">Today</option>
-                    <option value="7days">Last 7 Days</option>
-                  </select>
-
-                  {(verifSearch || verifLevelFilter !== 'ALL' || verifDateFilter !== 'ALL') && (
                     <button
                       type="button"
-                      onClick={() => {
-                        setVerifSearch('');
-                        setVerifLevelFilter('ALL');
-                        setVerifDateFilter('ALL');
-                      }}
-                      className="text-[#003f93] text-xs font-bold hover:underline px-2 cursor-pointer"
+                      onClick={exportVotersCSV}
+                      className="flex items-center gap-2 px-4 py-2 bg-white border border-[#c2c6d5] rounded-lg text-[#131b2e] text-xs font-bold hover:bg-[#f2f3ff] transition-colors shadow-2xs w-fit cursor-pointer"
                     >
-                      Clear Filters
+                      <Download className="w-4 h-4 text-[#003f93]" />
+                      <span>Export Records</span>
                     </button>
-                  )}
-                </div>
+                  </div>
 
-                {/* Table */}
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
-                    <thead className="bg-[#F1F5F9] border-b border-[#c2c6d5]">
-                      <tr>
-                        <th className="p-3.5 text-[11px] font-bold text-[#424653] uppercase tracking-wider">
-                          VOTER
-                        </th>
-                        <th className="p-3.5 text-[11px] font-bold text-[#424653] uppercase tracking-wider">
-                          MATRIC NUMBER
-                        </th>
-                        <th className="p-3.5 text-[11px] font-bold text-[#424653] uppercase tracking-wider">
-                          LEVEL
-                        </th>
-                        <th className="p-3.5 text-[11px] font-bold text-[#424653] uppercase tracking-wider">
-                          REGISTERED
-                        </th>
-                        <th className="p-3.5 text-[11px] font-bold text-[#424653] uppercase tracking-wider">
-                          STATUS
-                        </th>
-                        <th className="p-3.5 text-[11px] font-bold text-[#424653] uppercase tracking-wider text-right">
-                          ACTION
-                        </th>
-                      </tr>
-                    </thead>
+                  {/* Summary Cards (4 Cards Grid) */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
 
-                    <tbody className="divide-y divide-[#c2c6d5]/50">
-                      {filteredVerificationVoters.map((voter) => {
-                        const isPending = (!voter.isAccredited && voter.verificationStatus !== 'rejected') || voter.verificationStatus === 'pending';
-                        const isRejected = voter.verificationStatus === 'rejected';
-                        const isApproved = voter.isAccredited && !isRejected;
+                    {/* Pending Review */}
+                    <div className="bg-white p-5 rounded-xl border border-[#c2c6d5] shadow-xs flex flex-col justify-between min-h-[110px]">
+                      <span className="text-xs font-semibold text-[#424653]">
+                        Pending Review
+                      </span>
+                      <span className="text-4xl sm:text-5xl font-extrabold text-[#92400E] leading-none mt-2">
+                        {displayPendingCount.toLocaleString()}
+                      </span>
+                    </div>
 
-                        return (
-                          <tr key={voter.id} className="hover:bg-[#faf8ff] transition-colors">
-                            
-                            {/* Voter */}
-                            <td className="p-3.5">
-                              <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-full bg-[#eaedff] flex items-center justify-center text-[#003f93] font-bold text-xs shrink-0">
-                                  {getInitials(voter.fullName)}
-                                </div>
-                                <div>
-                                  <p className="text-xs sm:text-sm font-bold text-[#131b2e] leading-tight">
-                                    {voter.fullName}
-                                  </p>
-                                  <p className="text-[11px] text-[#424653]">
-                                    {voter.email || `${voter.matricNumber.toLowerCase().replace(/[^a-z0-9]/g, '')}@bamssa.edu`}
-                                  </p>
-                                </div>
-                              </div>
-                            </td>
+                    {/* Approved */}
+                    <div className="bg-white p-5 rounded-xl border border-[#c2c6d5] shadow-xs flex flex-col justify-between min-h-[110px]">
+                      <span className="text-xs font-semibold text-[#424653]">
+                        Approved
+                      </span>
+                      <span className="text-4xl sm:text-5xl font-extrabold text-[#003f93] leading-none mt-2">
+                        {displayApprovedCount.toLocaleString()}
+                      </span>
+                    </div>
 
-                            {/* Matric Number */}
-                            <td className="p-3.5 text-xs font-semibold text-[#131b2e]">
-                              {voter.matricNumber}
-                            </td>
+                    {/* Rejected */}
+                    <div className="bg-white p-5 rounded-xl border border-[#c2c6d5] shadow-xs flex flex-col justify-between min-h-[110px]">
+                      <span className="text-xs font-semibold text-[#424653]">
+                        Rejected
+                      </span>
+                      <span className="text-4xl sm:text-5xl font-extrabold text-[#ba1a1a] leading-none mt-2">
+                        {displayRejectedCount.toLocaleString()}
+                      </span>
+                    </div>
 
-                            {/* Level */}
-                            <td className="p-3.5 text-xs text-[#131b2e]">
-                              {voter.level}
-                            </td>
+                    {/* Total Submissions */}
+                    <div className="bg-white p-5 rounded-xl border border-[#c2c6d5] shadow-xs flex flex-col justify-between min-h-[110px]">
+                      <span className="text-xs font-semibold text-[#424653]">
+                        Total Submissions
+                      </span>
+                      <span className="text-4xl sm:text-5xl font-extrabold text-[#131b2e] leading-none mt-2">
+                        {displayTotalCount.toLocaleString()}
+                      </span>
+                    </div>
 
-                            {/* Registered */}
-                            <td className="p-3.5 text-xs text-[#424653]">
-                              {voter.registeredAt || 'Oct 12, 10:42 AM'}
-                            </td>
+                  </div>
 
-                            {/* Status */}
-                            <td className="p-3.5">
-                              {isPending && (
-                                <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#FEF3C7] text-[#92400E] font-bold text-[10px] uppercase tracking-wider">
-                                  Pending Review
-                                </span>
-                              )}
-                              {isApproved && (
-                                <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#d9e2ff] text-[#003f93] font-bold text-[10px] uppercase tracking-wider">
-                                  Approved
-                                </span>
-                              )}
-                              {isRejected && (
-                                <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#ffdad6] text-[#93000a] font-bold text-[10px] uppercase tracking-wider">
-                                  Rejected
-                                </span>
-                              )}
-                            </td>
+                  {/* Data Canvas Container */}
+                  <div className="bg-white rounded-xl border border-[#c2c6d5] shadow-xs overflow-hidden">
 
-                            {/* Action */}
-                            <td className="p-3.5 text-right">
-                              <button
-                                type="button"
-                                onClick={() => setSelectedReviewVoter(voter)}
-                                className="px-3.5 py-1.5 bg-[#0055c2] hover:bg-[#003f93] text-white rounded-md font-bold text-xs transition-colors shadow-2xs cursor-pointer"
-                              >
-                                Review
-                              </button>
-                            </td>
+                    {/* Tabs */}
+                    <div className="flex border-b border-[#c2c6d5] px-4 sm:px-6 pt-2 bg-white overflow-x-auto">
+                      <button
+                        type="button"
+                        onClick={() => setVerifActiveTab('all')}
+                        className={`px-4 py-3 text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${verifActiveTab === 'all'
+                            ? 'text-[#003f93] border-b-2 border-[#003f93]'
+                            : 'text-[#424653] hover:text-[#003f93]'
+                          }`}
+                      >
+                        All ({displayTotalCount.toLocaleString()})
+                      </button>
 
-                          </tr>
-                        );
-                      })}
+                      <button
+                        type="button"
+                        onClick={() => setVerifActiveTab('pending')}
+                        className={`px-4 py-3 text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${verifActiveTab === 'pending'
+                            ? 'text-[#003f93] border-b-2 border-[#003f93]'
+                            : 'text-[#424653] hover:text-[#003f93]'
+                          }`}
+                      >
+                        Pending ({displayPendingCount.toLocaleString()})
+                      </button>
 
-                      {filteredVerificationVoters.length === 0 && (
-                        <tr>
-                          <td colSpan={6} className="text-center py-12 text-[#737785]">
-                            <CheckCircle2 className="w-10 h-10 text-[#0055c2] mx-auto opacity-70 mb-2" />
-                            <p className="font-bold text-sm text-[#131b2e]">No Records Found</p>
-                            <p className="text-xs mt-1">No student records match the active filter criteria.</p>
-                          </td>
-                        </tr>
+                      <button
+                        type="button"
+                        onClick={() => setVerifActiveTab('approved')}
+                        className={`px-4 py-3 text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${verifActiveTab === 'approved'
+                            ? 'text-[#003f93] border-b-2 border-[#003f93]'
+                            : 'text-[#424653] hover:text-[#003f93]'
+                          }`}
+                      >
+                        Approved ({displayApprovedCount.toLocaleString()})
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setVerifActiveTab('rejected')}
+                        className={`px-4 py-3 text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${verifActiveTab === 'rejected'
+                            ? 'text-[#003f93] border-b-2 border-[#003f93]'
+                            : 'text-[#424653] hover:text-[#003f93]'
+                          }`}
+                      >
+                        Rejected ({displayRejectedCount.toLocaleString()})
+                      </button>
+                    </div>
+
+                    {/* Filters */}
+                    <div className="p-4 flex flex-wrap items-center gap-3 bg-[#eaedff]/30 border-b border-[#c2c6d5]">
+                      <div className="relative flex-1 min-w-[260px]">
+                        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#737785]" />
+                        <input
+                          type="text"
+                          value={verifSearch}
+                          onChange={(e) => setVerifSearch(e.target.value)}
+                          placeholder="Search by name, matric number or email..."
+                          className="w-full pl-9 pr-3 py-2 bg-white border border-[#c2c6d5] rounded-lg text-xs font-medium text-[#131b2e] focus:border-[#003f93] focus:ring-2 focus:ring-[#003f93]/10 transition-all outline-hidden"
+                        />
+                      </div>
+
+                      <select
+                        value={verifLevelFilter}
+                        onChange={(e) => setVerifLevelFilter(e.target.value)}
+                        className="px-3 py-2 bg-white border border-[#c2c6d5] rounded-lg text-xs font-medium text-[#131b2e] focus:border-[#003f93] focus:ring-2 focus:ring-[#003f93]/10 transition-all cursor-pointer outline-hidden"
+                      >
+                        <option value="ALL">Level (All)</option>
+                        <option value="100L">100L</option>
+                        <option value="200L">200L</option>
+                        <option value="300L">300L</option>
+                      </select>
+
+                      <select
+                        value={verifDateFilter}
+                        onChange={(e) => setVerifDateFilter(e.target.value)}
+                        className="px-3 py-2 bg-white border border-[#c2c6d5] rounded-lg text-xs font-medium text-[#131b2e] focus:border-[#003f93] focus:ring-2 focus:ring-[#003f93]/10 transition-all cursor-pointer outline-hidden"
+                      >
+                        <option value="ALL">Registration Date</option>
+                        <option value="today">Today</option>
+                        <option value="7days">Last 7 Days</option>
+                      </select>
+
+                      {(verifSearch || verifLevelFilter !== 'ALL' || verifDateFilter !== 'ALL') && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setVerifSearch('');
+                            setVerifLevelFilter('ALL');
+                            setVerifDateFilter('ALL');
+                          }}
+                          className="text-[#003f93] text-xs font-bold hover:underline px-2 cursor-pointer"
+                        >
+                          Clear Filters
+                        </button>
                       )}
-                    </tbody>
-                  </table>
-                </div>
+                    </div>
 
-                {/* Pagination */}
-                <div className="p-3.5 border-t border-[#c2c6d5] flex items-center justify-between bg-white">
-                  <span className="text-xs text-[#424653]">
-                    Showing 1–{filteredVerificationVoters.length} of {
-                      verifActiveTab === 'pending'
-                        ? `${displayPendingCount} pending voters`
-                        : verifActiveTab === 'approved'
-                        ? `${displayApprovedCount} approved voters`
-                        : verifActiveTab === 'rejected'
-                        ? `${displayRejectedCount} rejected voters`
-                        : `${displayTotalCount} total voters`
-                    }
-                  </span>
-                  
-                  <div className="flex gap-1.5">
-                    <button
-                      type="button"
-                      disabled
-                      className="p-1.5 rounded-md border border-[#c2c6d5] text-[#737785] opacity-50 cursor-not-allowed"
-                    >
-                      <ChevronRight className="w-4 h-4 rotate-180" />
-                    </button>
-                    <button
-                      type="button"
-                      className="p-1.5 rounded-md border border-[#c2c6d5] text-[#131b2e] hover:bg-[#eaedff] cursor-pointer transition-colors"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
+                    {/* Table */}
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse">
+                        <thead className="bg-[#F1F5F9] border-b border-[#c2c6d5]">
+                          <tr>
+                            <th className="p-3.5 text-[11px] font-bold text-[#424653] uppercase tracking-wider">
+                              VOTER
+                            </th>
+                            <th className="p-3.5 text-[11px] font-bold text-[#424653] uppercase tracking-wider">
+                              MATRIC NUMBER
+                            </th>
+                            <th className="p-3.5 text-[11px] font-bold text-[#424653] uppercase tracking-wider">
+                              LEVEL
+                            </th>
+                            <th className="p-3.5 text-[11px] font-bold text-[#424653] uppercase tracking-wider">
+                              REGISTERED
+                            </th>
+                            <th className="p-3.5 text-[11px] font-bold text-[#424653] uppercase tracking-wider">
+                              STATUS
+                            </th>
+                            <th className="p-3.5 text-[11px] font-bold text-[#424653] uppercase tracking-wider text-right">
+                              ACTION
+                            </th>
+                          </tr>
+                        </thead>
+
+                        <tbody className="divide-y divide-[#c2c6d5]/50">
+                          {filteredVerificationVoters.map((voter) => {
+                            const isPending = (!voter.isAccredited && voter.verificationStatus !== 'rejected') || voter.verificationStatus === 'pending';
+                            const isRejected = voter.verificationStatus === 'rejected';
+                            const isApproved = voter.isAccredited && !isRejected;
+
+                            return (
+                              <tr key={voter.id} className="hover:bg-[#faf8ff] transition-colors">
+
+                                {/* Voter */}
+                                <td className="p-3.5">
+                                  <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-[#eaedff] flex items-center justify-center text-[#003f93] font-bold text-xs shrink-0">
+                                      {getInitials(voter.fullName)}
+                                    </div>
+                                    <div>
+                                      <p className="text-xs sm:text-sm font-bold text-[#131b2e] leading-tight">
+                                        {voter.fullName}
+                                      </p>
+                                      <p className="text-[11px] text-[#424653]">
+                                        {voter.email || `${voter.matricNumber.toLowerCase().replace(/[^a-z0-9]/g, '')}@bamssa.edu`}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </td>
+
+                                {/* Matric Number */}
+                                <td className="p-3.5 text-xs font-semibold text-[#131b2e]">
+                                  {voter.matricNumber}
+                                </td>
+
+                                {/* Level */}
+                                <td className="p-3.5 text-xs text-[#131b2e]">
+                                  {voter.level}
+                                </td>
+
+                                {/* Registered */}
+                                <td className="p-3.5 text-xs text-[#424653]">
+                                  {voter.registeredAt || 'Oct 12, 10:42 AM'}
+                                </td>
+
+                                {/* Status */}
+                                <td className="p-3.5">
+                                  {isPending && (
+                                    <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#FEF3C7] text-[#92400E] font-bold text-[10px] uppercase tracking-wider">
+                                      Pending Review
+                                    </span>
+                                  )}
+                                  {isApproved && (
+                                    <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#d9e2ff] text-[#003f93] font-bold text-[10px] uppercase tracking-wider">
+                                      Approved
+                                    </span>
+                                  )}
+                                  {isRejected && (
+                                    <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#ffdad6] text-[#93000a] font-bold text-[10px] uppercase tracking-wider">
+                                      Rejected
+                                    </span>
+                                  )}
+                                </td>
+
+                                {/* Action */}
+                                <td className="p-3.5 text-right">
+                                  <button
+                                    type="button"
+                                    onClick={() => setSelectedReviewVoter(voter)}
+                                    className="px-3.5 py-1.5 bg-[#0055c2] hover:bg-[#003f93] text-white rounded-md font-bold text-xs transition-colors shadow-2xs cursor-pointer"
+                                  >
+                                    Review
+                                  </button>
+                                </td>
+
+                              </tr>
+                            );
+                          })}
+
+                          {filteredVerificationVoters.length === 0 && (
+                            <tr>
+                              <td colSpan={6} className="text-center py-12 text-[#737785]">
+                                <CheckCircle2 className="w-10 h-10 text-[#0055c2] mx-auto opacity-70 mb-2" />
+                                <p className="font-bold text-sm text-[#131b2e]">No Records Found</p>
+                                <p className="text-xs mt-1">No student records match the active filter criteria.</p>
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Pagination */}
+                    <div className="p-3.5 border-t border-[#c2c6d5] flex items-center justify-between bg-white">
+                      <span className="text-xs text-[#424653]">
+                        Showing 1–{filteredVerificationVoters.length} of {
+                          verifActiveTab === 'pending'
+                            ? `${displayPendingCount} pending voters`
+                            : verifActiveTab === 'approved'
+                              ? `${displayApprovedCount} approved voters`
+                              : verifActiveTab === 'rejected'
+                                ? `${displayRejectedCount} rejected voters`
+                                : `${displayTotalCount} total voters`
+                        }
+                      </span>
+
+                      <div className="flex gap-1.5">
+                        <button
+                          type="button"
+                          disabled
+                          className="p-1.5 rounded-md border border-[#c2c6d5] text-[#737785] opacity-50 cursor-not-allowed"
+                        >
+                          <ChevronRight className="w-4 h-4 rotate-180" />
+                        </button>
+                        <button
+                          type="button"
+                          className="p-1.5 rounded-md border border-[#c2c6d5] text-[#131b2e] hover:bg-[#eaedff] cursor-pointer transition-colors"
+                        >
+                          <ChevronRight className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
                   </div>
+
                 </div>
-
-              </div>
-
-            </div>
-            )}
+              )}
             </div>
           )}
 
@@ -2071,11 +2062,10 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                 <div className="flex items-center gap-3">
                   <CheckCircle2 className="w-5 h-5 text-[#737785]" />
                   <span className="text-sm text-[#424653]">Status: </span>
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
-                    status === 'LIVE' ? 'bg-[#d9e2ff] text-[#003f93]' : 
-                    status === 'CLOSED' ? 'bg-[#e2e7ff] text-[#424653]' : 
-                    'bg-[#f1f5f9] text-[#475569]'
-                  }`}>{status}</span>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${status === 'LIVE' ? 'bg-[#d9e2ff] text-[#003f93]' :
+                      status === 'CLOSED' ? 'bg-[#e2e7ff] text-[#424653]' :
+                        'bg-[#f1f5f9] text-[#475569]'
+                    }`}>{status}</span>
                 </div>
                 <div className="w-[1px] h-[20px] bg-[#c2c6d5] hidden md:block"></div>
                 <div className="flex items-center gap-3">
@@ -2179,14 +2169,14 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
           {/* TAB 5: CANDIDATES */}
           {activeTab === 'candidates' && (
             <div className="space-y-6 max-w-[1280px] mx-auto pb-24">
-              
+
               {/* Page Header Section */}
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5">
                 <div>
                   <div className="flex items-center gap-3 mb-2">
                     <h2 className="text-2xl md:text-3xl lg:text-[32px] text-[#131b2e] font-bold tracking-tight">Candidate Management</h2>
                     <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#fef3c7] text-[#92400e] text-xs font-bold border border-[#fcd34d]">
-                        STATUS: {status}
+                      STATUS: {status}
                     </span>
                   </div>
                   <p className="text-base text-[#424653] max-w-2xl">Review, manage and organize candidates participating in the FABAMSSA 2026 Delegate Elections.</p>
@@ -2196,7 +2186,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                     <Download className="w-5 h-5" />
                     Export Candidates
                   </button>
-                  <button 
+                  <button
                     onClick={() => setShowAddCandidate(!showAddCandidate)}
                     className="flex-1 md:flex-none bg-[#0055c2] text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:bg-[#003f93] transition-colors flex items-center justify-center gap-2 shadow-[0px_4px_6px_-1px_rgba(15,23,42,0.03),0px_2px_4px_-2px_rgba(15,23,42,0.02)] cursor-pointer"
                   >
@@ -2280,7 +2270,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
 
               {/* Main Interactive Area */}
               <div className="flex flex-col lg:flex-row gap-6">
-                
+
                 {/* Left/Main Column: Table & Filters */}
                 <div className="flex-1 flex flex-col gap-5">
                   {/* Toolbar Card */}
@@ -2288,7 +2278,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                     <div className="flex flex-col md:flex-row gap-3 items-center w-full">
                       <div className="relative w-full md:flex-1">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#737785] w-5 h-5 pointer-events-none" />
-                        <input className="w-full pl-10 pr-3 py-2 rounded-lg border border-[#c2c6d5] bg-[#faf8ff] focus:border-[#0055c2] focus:ring-2 focus:ring-[#0055c2]/10 transition-all text-sm outline-hidden placeholder:text-[#737785]" placeholder="Search candidate name or department" type="text"/>
+                        <input className="w-full pl-10 pr-3 py-2 rounded-lg border border-[#c2c6d5] bg-[#faf8ff] focus:border-[#0055c2] focus:ring-2 focus:ring-[#0055c2]/10 transition-all text-sm outline-hidden placeholder:text-[#737785]" placeholder="Search candidate name or department" type="text" />
                       </div>
                       <div className="flex items-center gap-3 w-full md:w-auto overflow-x-auto pb-1 md:pb-0 hide-scrollbar">
                         <select className="border border-[#c2c6d5] rounded-lg py-2 px-3 bg-[#faf8ff] text-sm focus:border-[#0055c2] focus:ring-2 focus:ring-[#0055c2]/10 whitespace-nowrap min-w-[120px] outline-hidden">
@@ -2340,7 +2330,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                                   </div>
                                 </td>
                                 <td className="py-3 px-5 text-sm">{pos?.title || 'Unknown'}</td>
-                                <td className="py-3 px-5 text-sm text-[#424653] font-mono">BAM/24/{c.id.replace('cand-','').padStart(3, '0')}</td>
+                                <td className="py-3 px-5 text-sm text-[#424653] font-mono">BAM/24/{c.id.replace('cand-', '').padStart(3, '0')}</td>
                                 <td className="py-3 px-5">
                                   {c.approvedByEleco ? (
                                     <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-[#003b82] text-white tracking-wide">APPROVED</span>
@@ -2380,7 +2370,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                                 )}
                                 <div>
                                   <div className="text-base font-semibold text-[#131b2e]">{c.fullName}</div>
-                                  <div className="text-xs text-[#424653] font-mono">BAM/24/{c.id.replace('cand-','').padStart(3, '0')}</div>
+                                  <div className="text-xs text-[#424653] font-mono">BAM/24/{c.id.replace('cand-', '').padStart(3, '0')}</div>
                                 </div>
                               </div>
                               <button type="button" onClick={() => handleDeleteCandidate(c)} title="Delete candidate" aria-label={`Delete ${c.fullName}`} className="text-[#93000a] p-1 cursor-pointer hover:bg-[#ffdad6] rounded-full"><Trash2 className="w-5 h-5" /></button>
@@ -2468,14 +2458,14 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                   <div>
                     <h3 className="text-lg font-semibold text-[#131b2e] mb-2">BAMSSA 2026 DELEGATE ELECTIONS</h3>
                     <div className="flex flex-wrap gap-3 text-sm text-[#424653]">
-                      <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> 10 September 2026</span>
-                      <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> 8:00 AM – 4:00 PM</span>
+                      <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> 18 September 2026</span>
+                      <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> 1:00 PM – 2:00 PM</span>
                     </div>
                   </div>
                   <div className="bg-[#f2f3ff] p-3 rounded-lg border border-[#c2c6d5] text-center md:text-left w-full md:w-auto">
                     <p className="text-sm text-[#424653]">
                       {status === 'STANDBY'
-                        ? 'Voting has not started. Live participation data will appear when voting begins.' 
+                        ? 'Voting has not started. Live participation data will appear when voting begins.'
                         : status === 'LIVE'
                           ? 'Voting is live. Ballots are being recorded securely.'
                           : 'Voting has concluded. Final results are being tabulated.'}
@@ -2549,24 +2539,24 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                 ) : (
                   <>
                     <div className="col-span-12 md:col-span-6 bg-white border border-[#c2c6d5] rounded-xl p-8 flex flex-col justify-center min-h-[300px] shadow-[0px_4px_6px_-1px_rgba(15,23,42,0.03),0px_2px_4px_-2px_rgba(15,23,42,0.02)]">
-                       <h4 className="text-lg font-semibold text-[#131b2e] mb-5">Departmental Turnout Progress</h4>
-                       <div className="space-y-4">
-                         {(Object.keys(departmentStats) as BMSDepartment[]).map(dept => {
-                           const stats = departmentStats[dept];
-                           const pct = stats.eligible > 0 ? Math.round((stats.voted / stats.eligible) * 100) : 0;
-                           return (
-                             <div key={dept} className="space-y-2">
-                               <div className="flex justify-between text-xs font-bold">
-                                 <span className="text-[#131b2e]">{dept}</span>
-                                 <span className="text-[#003f93]">{pct}% ({stats.voted}/{stats.eligible})</span>
-                               </div>
-                               <div className="w-full bg-[#e2e7ff] h-2 rounded-full overflow-hidden">
-                                 <div className="bg-[#003f93] h-full rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
-                               </div>
-                             </div>
-                           );
-                         })}
-                       </div>
+                      <h4 className="text-lg font-semibold text-[#131b2e] mb-5">Departmental Turnout Progress</h4>
+                      <div className="space-y-4">
+                        {(Object.keys(departmentStats) as BMSDepartment[]).map(dept => {
+                          const stats = departmentStats[dept];
+                          const pct = stats.eligible > 0 ? Math.round((stats.voted / stats.eligible) * 100) : 0;
+                          return (
+                            <div key={dept} className="space-y-2">
+                              <div className="flex justify-between text-xs font-bold">
+                                <span className="text-[#131b2e]">{dept}</span>
+                                <span className="text-[#003f93]">{pct}% ({stats.voted}/{stats.eligible})</span>
+                              </div>
+                              <div className="w-full bg-[#e2e7ff] h-2 rounded-full overflow-hidden">
+                                <div className="bg-[#003f93] h-full rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
 
                     <div className="col-span-12 md:col-span-6 bg-white border border-[#c2c6d5] rounded-xl p-8 flex flex-col justify-center min-h-[300px] shadow-[0px_4px_6px_-1px_rgba(15,23,42,0.03),0px_2px_4px_-2px_rgba(15,23,42,0.02)]">
@@ -2581,13 +2571,13 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                           <span className="text-sm font-bold text-[#737785]">75%</span>
                         </div>
                         <div className="pt-4">
-                           <div className="flex justify-between text-xs font-bold mb-2">
-                             <span className="text-[#131b2e]">Progress to Target</span>
-                             <span className="text-[#003f93]">{Math.min(100, Math.round((turnoutPercentage / 75) * 100))}%</span>
-                           </div>
-                           <div className="w-full bg-[#e2e7ff] h-2 rounded-full overflow-hidden">
-                             <div className="bg-[#0c59c6] h-full rounded-full transition-all duration-500" style={{ width: `${Math.min(100, Math.round((turnoutPercentage / 75) * 100))}%` }} />
-                           </div>
+                          <div className="flex justify-between text-xs font-bold mb-2">
+                            <span className="text-[#131b2e]">Progress to Target</span>
+                            <span className="text-[#003f93]">{Math.min(100, Math.round((turnoutPercentage / 75) * 100))}%</span>
+                          </div>
+                          <div className="w-full bg-[#e2e7ff] h-2 rounded-full overflow-hidden">
+                            <div className="bg-[#0c59c6] h-full rounded-full transition-all duration-500" style={{ width: `${Math.min(100, Math.round((turnoutPercentage / 75) * 100))}%` }} />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -2622,12 +2612,12 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                 <div>
                   <h3 className="text-base font-bold text-[#131b2e]">{resultsStatus === 'PUBLISHED' || resultsStatus === 'CERTIFIED' ? `Results ${resultsStatus.toLowerCase()}` : 'Results ready for publication'}</h3>
 
-              <div className="flex flex-wrap justify-end gap-3">
-                <button type="button" onClick={openManualResults} disabled={resultsStatus === 'CERTIFIED'} className="inline-flex items-center gap-2 rounded-lg border border-[#c2c6d5] bg-white px-4 py-2.5 text-sm font-bold text-[#131b2e] hover:bg-[#f2f3ff] disabled:cursor-not-allowed disabled:opacity-50">
-                  <Edit3 className="h-4 w-4" />
-                  Enter Results Manually
-                </button>
-              </div>
+                  <div className="flex flex-wrap justify-end gap-3">
+                    <button type="button" onClick={openManualResults} disabled={resultsStatus === 'CERTIFIED'} className="inline-flex items-center gap-2 rounded-lg border border-[#c2c6d5] bg-white px-4 py-2.5 text-sm font-bold text-[#131b2e] hover:bg-[#f2f3ff] disabled:cursor-not-allowed disabled:opacity-50">
+                      <Edit3 className="h-4 w-4" />
+                      Enter Results Manually
+                    </button>
+                  </div>
                   <p className="text-sm text-[#424653] mt-1">{resultsStatus === 'DRAFT' ? `${positions.length} positions configured. Publish only after reviewing the recorded totals.` : 'Students can view the published results on the public Results page.'}</p>
                 </div>
                 <button type="button" onClick={handlePublishResults} disabled={status === 'LIVE' || resultsStatus !== 'DRAFT'} className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0055c2] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#003f93] disabled:cursor-not-allowed disabled:opacity-50">
@@ -2754,7 +2744,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                                       type="number"
                                       min={0}
                                       value={candidate.votesCount}
-                                        disabled={status === 'CERTIFIED'}
+                                      disabled={status === 'CERTIFIED'}
                                       onChange={(e) => {
                                         const nextValue = Number(e.target.value);
                                         if (Number.isNaN(nextValue)) return;
@@ -2858,20 +2848,18 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                     ].map((step) => (
                       <div key={step.label} className="flex flex-col items-center gap-2 w-24">
                         <div
-                          className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
-                            step.complete
+                          className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${step.complete
                               ? 'bg-[#0055c2] border-[#0055c2] text-white'
                               : step.active
                                 ? 'bg-white border-[#0055c2] text-[#0055c2]'
                                 : 'bg-[#f2f3ff] border-[#c2c6d5] text-[#737785]'
-                          }`}
+                            }`}
                         >
                           {step.complete ? <Check className="w-4 h-4" /> : <span className="w-2.5 h-2.5 rounded-full bg-current" />}
                         </div>
                         <span
-                          className={`text-[10px] uppercase tracking-wider text-center font-bold ${
-                            step.complete || step.active ? 'text-[#003f93]' : 'text-[#737785]'
-                          }`}
+                          className={`text-[10px] uppercase tracking-wider text-center font-bold ${step.complete || step.active ? 'text-[#003f93]' : 'text-[#737785]'
+                            }`}
                         >
                           {step.label}
                         </span>
@@ -2929,25 +2917,23 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                     ].map((item, idx) => (
                       <div key={item.label} className="flex items-center justify-between gap-3 p-3 rounded-xl border border-[#c2c6d5] bg-[#faf8ff]">
                         <div className="flex items-center gap-3 text-left">
-                          <span className={`w-5 h-5 flex items-center justify-center rounded-full ${
-                            item.state === 'Verified'
+                          <span className={`w-5 h-5 flex items-center justify-center rounded-full ${item.state === 'Verified'
                               ? 'bg-[#d9e2ff] text-[#003f93]'
                               : item.state === 'Not Ready'
                                 ? 'bg-[#ffdad6] text-[#93000a]'
                                 : 'bg-[#f2f3ff] text-[#737785]'
-                          }`}>
+                            }`}>
                             {item.state === 'Verified' ? <Check className="w-3.5 h-3.5" /> : item.state === 'Not Ready' ? <X className="w-3.5 h-3.5" /> : <span className="w-2 h-2 rounded-full bg-current" />}
                           </span>
                           <span className="text-sm text-[#131b2e]">{item.label}</span>
                         </div>
                         <span
-                          className={`text-[10px] font-bold uppercase tracking-wider rounded px-2 py-1 border ${
-                            item.state === 'Verified'
+                          className={`text-[10px] font-bold uppercase tracking-wider rounded px-2 py-1 border ${item.state === 'Verified'
                               ? 'bg-[#d9e2ff] text-[#003f93] border-[#adc6ff]'
                               : item.state === 'Not Ready'
                                 ? 'bg-[#ffdad6] text-[#93000a] border-[#ffb4ab]'
                                 : 'bg-[#f2f3ff] text-[#737785] border-[#c2c6d5]'
-                          }`}
+                            }`}
                         >
                           {item.state}
                         </span>
@@ -2988,28 +2974,28 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                         const position = positions.find((candidatePosition) => candidatePosition.id === item.positionId);
                         const totalVotes = item.candidates.reduce((total: number, candidate: any) => total + (candidate.votes_count || 0), 0);
                         return (
-                        <tr key={item.positionId} className="border-t border-[#eaedff] bg-white text-sm">
-                          <td className="px-4 py-4 font-bold text-[#131b2e]">{position?.title || item.positionId}</td>
-                          <td className="px-4 py-4 text-[#424653]">{item.candidates.length}</td>
-                          <td className="px-4 py-4 text-[#424653]">{totalVotes}</td>
-                          <td className="px-4 py-4">
-                            <span className={`inline-flex items-center gap-1 rounded border text-[10px] font-bold px-2 py-1 uppercase tracking-wider ${item.isReviewed ? 'border-[#adc6ff] bg-[#d9e2ff] text-[#003f93]' : 'border-[#c2c6d5] bg-[#f2f3ff] text-[#424653]'}`}>
-                              {item.isReviewed ? <Check className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
-                              {item.isReviewed ? 'Reviewed' : 'Pending Review'}
-                            </span>
-                          </td>
-                          <td className="px-4 py-4 text-right">
-                            <button
-                              type="button"
-                              onClick={() => handleReviewPosition(item.positionId)}
-                              disabled={item.isReviewed || readinessStatus === 'CERTIFIED'}
-                              className={`inline-flex items-center gap-1 text-xs font-bold ${item.isReviewed || readinessStatus === 'CERTIFIED' ? 'text-[#737785] cursor-not-allowed' : 'text-[#0055c2] hover:text-[#003f93] cursor-pointer'}`}
-                            >
-                              {item.isReviewed ? 'Reviewed' : 'Review'}
-                              <ChevronRight className="w-4 h-4" />
-                            </button>
-                          </td>
-                        </tr>
+                          <tr key={item.positionId} className="border-t border-[#eaedff] bg-white text-sm">
+                            <td className="px-4 py-4 font-bold text-[#131b2e]">{position?.title || item.positionId}</td>
+                            <td className="px-4 py-4 text-[#424653]">{item.candidates.length}</td>
+                            <td className="px-4 py-4 text-[#424653]">{totalVotes}</td>
+                            <td className="px-4 py-4">
+                              <span className={`inline-flex items-center gap-1 rounded border text-[10px] font-bold px-2 py-1 uppercase tracking-wider ${item.isReviewed ? 'border-[#adc6ff] bg-[#d9e2ff] text-[#003f93]' : 'border-[#c2c6d5] bg-[#f2f3ff] text-[#424653]'}`}>
+                                {item.isReviewed ? <Check className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
+                                {item.isReviewed ? 'Reviewed' : 'Pending Review'}
+                              </span>
+                            </td>
+                            <td className="px-4 py-4 text-right">
+                              <button
+                                type="button"
+                                onClick={() => handleReviewPosition(item.positionId)}
+                                disabled={item.isReviewed || readinessStatus === 'CERTIFIED'}
+                                className={`inline-flex items-center gap-1 text-xs font-bold ${item.isReviewed || readinessStatus === 'CERTIFIED' ? 'text-[#737785] cursor-not-allowed' : 'text-[#0055c2] hover:text-[#003f93] cursor-pointer'}`}
+                              >
+                                {item.isReviewed ? 'Reviewed' : 'Review'}
+                                <ChevronRight className="w-4 h-4" />
+                              </button>
+                            </td>
+                          </tr>
                         );
                       })}
                     </tbody>
@@ -3289,7 +3275,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
 
               {/* Main Settings Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                
+
                 {/* Navigation Sidebar */}
                 <aside className="lg:col-span-4 xl:col-span-3">
                   <div className="bg-white rounded-2xl border border-[#e2e8f0] p-3 shadow-xs space-y-1">
@@ -3306,22 +3292,20 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                           key={id}
                           type="button"
                           onClick={() => setSettingsTab(id)}
-                          className={`w-full text-left p-3.5 rounded-xl transition-all flex items-center justify-between group cursor-pointer ${
-                            isActive
+                          className={`w-full text-left p-3.5 rounded-xl transition-all flex items-center justify-between group cursor-pointer ${isActive
                               ? isDanger
                                 ? 'bg-[#fff1f2] border border-[#fecdd3] text-[#9f1239]'
                                 : 'bg-[#eff6ff] border border-[#bfdbfe] text-[#1e40af] shadow-xs'
                               : isDanger
                                 ? 'hover:bg-[#fff1f2] text-[#991b1b]'
                                 : 'hover:bg-[#f8fafc] text-[#334155]'
-                          }`}
+                            }`}
                         >
                           <div className="flex items-center gap-3">
-                            <div className={`p-2 rounded-lg ${
-                              isActive
+                            <div className={`p-2 rounded-lg ${isActive
                                 ? isDanger ? 'bg-[#ffe4e6] text-[#be123c]' : 'bg-[#dbeafe] text-[#1d4ed8]'
                                 : isDanger ? 'bg-[#fee2e2] text-[#dc2626]' : 'bg-[#f1f5f9] text-[#64748b] group-hover:bg-[#e2e8f0]'
-                            }`}>
+                              }`}>
                               <Icon className="w-4 h-4" />
                             </div>
                             <div>
@@ -3352,7 +3336,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
 
                 {/* Tab Content Panels */}
                 <section className="lg:col-span-8 xl:col-span-9 space-y-6">
-                  
+
                   {/* TAB: PROFILE & ACCOUNT */}
                   {settingsTab === 'profile' && (
                     <div className="bg-white rounded-2xl border border-[#e2e8f0] shadow-xs overflow-hidden">
@@ -3540,8 +3524,8 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                                 {status === 'LIVE'
                                   ? 'The election is currently live. Voting booth is open and receiving voter ballots in real time.'
                                   : status === 'CERTIFIED'
-                                  ? 'Election results have been certified. To run another session, reset the election.'
-                                  : 'Starting the election opens the student voting booth and activates the live countdown timer.'}
+                                    ? 'Election results have been certified. To run another session, reset the election.'
+                                    : 'Starting the election opens the student voting booth and activates the live countdown timer.'}
                               </p>
                             </div>
 
@@ -3550,11 +3534,10 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                                 type="button"
                                 onClick={() => handleStatusChange(status === 'LIVE' ? 'CLOSED' : 'LIVE')}
                                 disabled={status === 'CERTIFIED'}
-                                className={`w-full py-3 px-4 rounded-xl font-bold text-sm text-white shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
-                                  status === 'LIVE'
+                                className={`w-full py-3 px-4 rounded-xl font-bold text-sm text-white shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${status === 'LIVE'
                                     ? 'bg-[#dc2626] hover:bg-[#b91c1c]'
                                     : 'bg-[#0055c2] hover:bg-[#003f93]'
-                                }`}
+                                  }`}
                               >
                                 {status === 'LIVE' ? (
                                   <>
@@ -3770,13 +3753,12 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
 
       {/* TOAST NOTIFICATION */}
       {feedbackToast && (
-        <div className={`fixed bottom-5 right-5 z-70 px-4 py-3 rounded-xl shadow-lg border text-xs font-bold flex items-center gap-2 animate-in slide-in-from-bottom-5 ${
-          feedbackToast.type === 'success'
+        <div className={`fixed bottom-5 right-5 z-70 px-4 py-3 rounded-xl shadow-lg border text-xs font-bold flex items-center gap-2 animate-in slide-in-from-bottom-5 ${feedbackToast.type === 'success'
             ? 'bg-[#d9e2ff] text-[#003f93] border-[#adc6ff]'
             : feedbackToast.type === 'error'
-            ? 'bg-[#ffdad6] text-[#93000a] border-[#ffb4ab]'
-            : 'bg-[#faf8ff] text-[#131b2e] border-[#c2c6d5]'
-        }`}>
+              ? 'bg-[#ffdad6] text-[#93000a] border-[#ffb4ab]'
+              : 'bg-[#faf8ff] text-[#131b2e] border-[#c2c6d5]'
+          }`}>
           {feedbackToast.type === 'success' && <CheckCircle2 className="w-4 h-4 text-[#0055c2]" />}
           {feedbackToast.type === 'error' && <AlertTriangle className="w-4 h-4 text-[#ba1a1a]" />}
           <span>{feedbackToast.message}</span>
