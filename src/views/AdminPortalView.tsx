@@ -316,9 +316,12 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
   };
 
   const handleDeleteVoter = async (voter: Voter) => {
-    if (!window.confirm(`Delete voter ${voter.fullName}? This removes the voter from the registry.`)) return;
+    if (!window.confirm(`Delete voter ${voter.fullName} (${voter.matricNumber})? This removes the voter from the registry.`)) return;
     const result = await deleteVoter(voter.id);
-    showToast(result.success ? `Voter ${voter.fullName} deleted.` : result.message || 'Unable to delete voter.', result.success ? 'success' : 'error');
+    if (selectedReviewVoter?.id === voter.id) {
+      setSelectedReviewVoter(null);
+    }
+    showToast(result.success ? result.message || `Voter ${voter.fullName} deleted successfully.` : result.message || 'Unable to delete voter.', result.success ? 'success' : 'error');
   };
 
   const handleDeletePosition = async (position: ElectionPosition) => {
