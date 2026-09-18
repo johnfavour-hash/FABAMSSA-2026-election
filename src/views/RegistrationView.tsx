@@ -95,10 +95,12 @@ export const RegistrationView: React.FC<RegistrationViewProps> = ({
       });
 
       if (created) {
-        setRegisteredVoter(created);
+        setRegisteredVoter(created as Voter);
         setRegistrationSubmitted(true);
         setRegisteredPin(null);
       }
+    } catch (err: any) {
+      setErrorMessage(err.message || 'An error occurred during registration.');
     } finally {
       setIsSubmitting(false);
     }

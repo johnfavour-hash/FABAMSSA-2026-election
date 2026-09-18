@@ -586,9 +586,9 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         `Matriculation ${newVoter.matricNumber} submitted for eligibility review.`
       );
       return newVoter;
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      return null;
+      throw new Error(error.message || 'Failed to enroll voter');
     }
   };
 
