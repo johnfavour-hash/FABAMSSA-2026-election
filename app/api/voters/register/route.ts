@@ -21,13 +21,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, message: 'Only accredited delegates from Anatomy and Psychology departments (100L to 300L) may register for this delegate election.' }, { status: 400 });
     }
 
-    const idCardUrl = String(payload.idCardUrl ?? '').trim();
-    if (!/^data:image\/(jpeg|png|webp);base64,/.test(idCardUrl)) {
-      return NextResponse.json({ success: false, message: 'A clear image of your UNIPORT Student ID or recent Course Form is required.' }, { status: 400 });
-    }
-    if (idCardUrl.length > 1_500_000) {
-      return NextResponse.json({ success: false, message: 'The uploaded document is too large. Please use a smaller or lower-resolution image.' }, { status: 413 });
-    }
 
     const matricNumber = String(payload.matricNumber).trim().toUpperCase();
     const supabase = getSupabaseAdmin();
@@ -60,7 +53,7 @@ export async function POST(request: Request) {
       verification_status: 'pending',
       registered_at: now,
       rejection_reason: null,
-      id_card_url: idCardUrl,
+      id_card_url: null,
       registration_id: null,
       review_notes: null,
     } as never);

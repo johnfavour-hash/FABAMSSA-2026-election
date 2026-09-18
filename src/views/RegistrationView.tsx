@@ -1,5 +1,4 @@
-import React, { useState, useRef } from 'react';
-import { compressImageFile } from '../utils/imageCompression';
+import React, { useState } from 'react';
 import { useElection } from '../context/ElectionContext';
 import { BMSDepartment, AcademicLevel, Voter } from '../types';
 import { 
@@ -8,18 +7,12 @@ import {
   Lock, 
   Eye, 
   EyeOff, 
-  Upload, 
   ShieldCheck, 
   ArrowRight, 
-  CheckCircle2, 
   AlertCircle, 
   Copy, 
   Check, 
-  FileCheck, 
   UserCheck,
-  IdCard,
-  FileText,
-  X,
   Clock,
   Loader2,
 } from 'lucide-react';
@@ -50,12 +43,6 @@ export const RegistrationView: React.FC<RegistrationViewProps> = ({
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   
-  // File upload state
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [filePreview, setFilePreview] = useState<string | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
   // Result state
   const [registrationSubmitted, setRegistrationSubmitted] = useState(false);
   const [registeredVoter, setRegisteredVoter] = useState<Voter | null>(null);
@@ -63,70 +50,7 @@ export const RegistrationView: React.FC<RegistrationViewProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [copiedPin, setCopiedPin] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isCompressing, setIsCompressing] = useState(false);
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-        setErrorMessage('Please upload a JPG, PNG, or WebP image of your Student ID or Course Form.');
-        return;
-      }
-      if (file.size > 10 * 1024 * 1024) {
-        setErrorMessage('The uploaded document must be 10 MB or smaller.');
-        return;
-      }
-      setSelectedFile(file);
-      setIsCompressing(true);
-      setErrorMessage(null);
-      try {
-        const compressed = await compressImageFile(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.75 });
-        setFilePreview(compressed);
-      } catch {
-        setErrorMessage('Could not process the image. Please try a different file.');
-        setFilePreview(null);
-      } finally {
-        setIsCompressing(false);
-      }
-    }
-  };
-
-  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-        setErrorMessage('Please upload a JPG, PNG, or WebP image of your Student ID or Course Form.');
-        return;
-      }
-      if (file.size > 10 * 1024 * 1024) {
-        setErrorMessage('The uploaded document must be 10 MB or smaller.');
-        return;
-      }
-      setSelectedFile(file);
-      setIsCompressing(true);
-      setErrorMessage(null);
-      try {
-        const compressed = await compressImageFile(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.75 });
-        setFilePreview(compressed);
-      } catch {
-        setErrorMessage('Could not process the image. Please try a different file.');
-        setFilePreview(null);
-      } finally {
-        setIsCompressing(false);
-      }
-    }
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = () => {
-    setIsDragging(false);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -142,11 +66,6 @@ export const RegistrationView: React.FC<RegistrationViewProps> = ({
 
       if (!termsAccepted) {
         setErrorMessage('Please confirm that the information provided is accurate.');
-        return;
-      }
-
-      if (!selectedFile || !filePreview) {
-        setErrorMessage('Please upload a clear photo of your UNIPORT Student ID or recent Course Form.');
         return;
       }
 
@@ -173,7 +92,6 @@ export const RegistrationView: React.FC<RegistrationViewProps> = ({
         level,
         email: email.trim() || `${trimmedMatric.toLowerCase().replace('/', '')}@uniport.edu.ng`,
         phone: '+234 800 000 0000',
-        idCardUrl: filePreview,
       });
 
       if (created) {
@@ -440,79 +358,16 @@ export const RegistrationView: React.FC<RegistrationViewProps> = ({
                   </div>
                 </section>
 
-                {/* Section 4: Identity Verification */}
-                <section className="space-y-4">
-                  <div className="flex items-center gap-2 border-b border-[#c2c6d5]/60 pb-3">
-                    <IdCard className="w-5 h-5 text-[#003f93]" />
-                    <h2 className="text-lg font-bold text-[#131b2e]">Identity Verification</h2>
+                {/* Verification Note */}
+                <div className="bg-[#f2f3ff] p-4 rounded-xl flex gap-3 items-start border border-[#d2d9f4]">
+                  <ShieldCheck className="w-5 h-5 text-[#003f93] shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-sm font-bold text-[#131b2e] mb-0.5">Admin Verification</h4>
+                    <p className="text-xs text-[#424653] leading-relaxed">
+                      After submitting, ELECO will review your details and approve your eligibility before you can vote. No document upload is required at this stage.
+                    </p>
                   </div>
-
-                  <p className="text-sm text-[#424653]">
-                    Upload a clear photo of your UNIPORT Student ID or recent Course Form.
-                  </p>
-
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    accept="image/png, image/jpeg, image/webp"
-                    className="hidden"
-                  />
-
-                  <div
-                    onClick={() => fileInputRef.current?.click()}
-                    onDrop={handleDrop}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    className={`border-2 border-dashed rounded-2xl p-8 sm:p-10 flex flex-col items-center justify-center text-center transition-all cursor-pointer group bg-[#faf8ff] ${
-                      isDragging
-                        ? 'border-[#003f93] bg-[#f2f3ff]'
-                        : 'border-[#c2c6d5] hover:border-[#003f93] hover:bg-[#f2f3ff]'
-                    }`}
-                  >
-                    {selectedFile ? (
-                      <div className="space-y-2 flex flex-col items-center">
-                        {filePreview ? (
-                          <img
-                            src={filePreview}
-                            alt="Uploaded preview"
-                            className="w-24 h-24 object-cover rounded-xl border border-[#c2c6d5] shadow-xs mb-2"
-                          />
-                        ) : (
-                          <div className="w-16 h-16 rounded-full bg-[#dcfce7] text-[#15803d] flex items-center justify-center mb-2">
-                            <FileCheck className="w-8 h-8" />
-                          </div>
-                        )}
-                        <p className="text-sm font-bold text-[#131b2e]">{selectedFile.name}</p>
-                        <p className="text-xs text-[#737785]">
-                          {(selectedFile.size / 1024 / 1024).toFixed(2)} MB • Click or drag to replace
-                        </p>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="w-16 h-16 rounded-full bg-[#0055c2]/10 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform text-[#003f93]">
-                          <Upload className="w-7 h-7" />
-                        </div>
-                        <h3 className="text-base font-bold text-[#131b2e] mb-1">
-                          Click to upload or drag and drop
-                        </h3>
-                        <p className="text-xs text-[#737785]">
-                          PNG, JPG or WebP (Max. 10MB) — auto-optimised before upload
-                        </p>
-                      </>
-                    )}
-                  </div>
-
-                  <div className="bg-[#f2f3ff] p-4 rounded-xl flex gap-3 items-start border border-[#d2d9f4]">
-                    <ShieldCheck className="w-5 h-5 text-[#003f93] shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold text-[#131b2e] mb-0.5">Secure Verification</h4>
-                      <p className="text-xs text-[#424653] leading-relaxed">
-                        Your document is used by ELECO for electoral accreditation review.
-                      </p>
-                    </div>
-                  </div>
-                </section>
+                </div>
 
                 {/* Form Actions & Disclaimer */}
                 <div className="pt-4 border-t border-[#c2c6d5]/60 space-y-5">
@@ -531,19 +386,14 @@ export const RegistrationView: React.FC<RegistrationViewProps> = ({
 
                   <button
                     type="submit"
-                    disabled={isSubmitting || isCompressing}
+                    disabled={isSubmitting}
                     className={`w-full h-14 rounded-xl font-bold text-base flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer ${
-                      isSubmitting || isCompressing
+                      isSubmitting
                         ? 'bg-[#0055c2]/80 text-white/90 cursor-not-allowed'
                         : 'bg-[#003f93] hover:bg-[#002f70] text-white'
                     }`}
                   >
-                    {isCompressing ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>Optimising document…</span>
-                      </>
-                    ) : isSubmitting ? (
+                    {isSubmitting ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" />
                         <span>Submitting registration…</span>
