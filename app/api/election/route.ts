@@ -19,7 +19,6 @@ const publicVoterFields = [
   'rejection_reason',
   'accreditation_time',
   'avatar_url',
-  'id_card_url',
   'review_notes',
 ].join(',');
 

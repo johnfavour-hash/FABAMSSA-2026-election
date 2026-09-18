@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { compressImageFile } from '../utils/imageCompression';
 import * as XLSX from 'xlsx';
 import { useElection } from '../context/ElectionContext';
 import { ElectionStatus, BMSDepartment, AcademicLevel, Candidate, ElectionPosition, Voter } from '../types';
@@ -565,7 +566,7 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
     setShowAddPosition(false);
   };
 
-  const handleCandidatePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCandidatePhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -574,12 +575,12 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = String(reader.result || '');
-      setNewCandPhoto(result);
-    };
-    reader.readAsDataURL(file);
+    try {
+      const compressed = await compressImageFile(file, { maxWidth: 800, maxHeight: 800, quality: 0.80 });
+      setNewCandPhoto(compressed);
+    } catch {
+      showToast('Could not process the photo. Please try a different image.', 'error');
+    }
   };
 
   const handleCreateCandidate = async (e: React.FormEvent) => {
@@ -638,16 +639,19 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
     showToast(`${newVoterName} was enrolled and is awaiting approval.`, 'success');
   };
 
-  const handleVoterIdCard = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleVoterIdCard = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 5 * 1024 * 1024) {
-      showToast('Choose a JPG, PNG, or WebP image under 5 MB.', 'error');
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 10 * 1024 * 1024) {
+      showToast('Choose a JPG, PNG, or WebP image under 10 MB.', 'error');
       return;
     }
-    const reader = new FileReader();
-    reader.onload = () => setNewVoterIdCard(typeof reader.result === 'string' ? reader.result : '');
-    reader.readAsDataURL(file);
+    try {
+      const compressed = await compressImageFile(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.75 });
+      setNewVoterIdCard(compressed);
+    } catch {
+      showToast('Could not process the image. Please try a different file.', 'error');
+    }
   };
 
   const exportAuditCSV = () => {

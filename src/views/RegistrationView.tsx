@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { compressImageFile } from '../utils/imageCompression';
 import { useElection } from '../context/ElectionContext';
 import { BMSDepartment, AcademicLevel, Voter } from '../types';
 import { 
@@ -62,30 +63,35 @@ export const RegistrationView: React.FC<RegistrationViewProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [copiedPin, setCopiedPin] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCompressing, setIsCompressing] = useState(false);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
         setErrorMessage('Please upload a JPG, PNG, or WebP image of your Student ID or Course Form.');
         return;
       }
-      if (file.size > 5 * 1024 * 1024) {
-        setErrorMessage('The uploaded document must be 5 MB or smaller.');
+      if (file.size > 10 * 1024 * 1024) {
+        setErrorMessage('The uploaded document must be 10 MB or smaller.');
         return;
       }
       setSelectedFile(file);
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = () => setFilePreview(reader.result as string);
-        reader.readAsDataURL(file);
-      } else {
+      setIsCompressing(true);
+      setErrorMessage(null);
+      try {
+        const compressed = await compressImageFile(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.75 });
+        setFilePreview(compressed);
+      } catch {
+        setErrorMessage('Could not process the image. Please try a different file.');
         setFilePreview(null);
+      } finally {
+        setIsCompressing(false);
       }
     }
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
@@ -94,17 +100,21 @@ export const RegistrationView: React.FC<RegistrationViewProps> = ({
         setErrorMessage('Please upload a JPG, PNG, or WebP image of your Student ID or Course Form.');
         return;
       }
-      if (file.size > 5 * 1024 * 1024) {
-        setErrorMessage('The uploaded document must be 5 MB or smaller.');
+      if (file.size > 10 * 1024 * 1024) {
+        setErrorMessage('The uploaded document must be 10 MB or smaller.');
         return;
       }
       setSelectedFile(file);
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = () => setFilePreview(reader.result as string);
-        reader.readAsDataURL(file);
-      } else {
+      setIsCompressing(true);
+      setErrorMessage(null);
+      try {
+        const compressed = await compressImageFile(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.75 });
+        setFilePreview(compressed);
+      } catch {
+        setErrorMessage('Could not process the image. Please try a different file.');
         setFilePreview(null);
+      } finally {
+        setIsCompressing(false);
       }
     }
   };
@@ -487,7 +497,7 @@ export const RegistrationView: React.FC<RegistrationViewProps> = ({
                           Click to upload or drag and drop
                         </h3>
                         <p className="text-xs text-[#737785]">
-                          PNG, JPG or WebP (Max. 5MB)
+                          PNG, JPG or WebP (Max. 10MB) — auto-optimised before upload
                         </p>
                       </>
                     )}
@@ -521,14 +531,19 @@ export const RegistrationView: React.FC<RegistrationViewProps> = ({
 
                   <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isCompressing}
                     className={`w-full h-14 rounded-xl font-bold text-base flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer ${
-                      isSubmitting
+                      isSubmitting || isCompressing
                         ? 'bg-[#0055c2]/80 text-white/90 cursor-not-allowed'
                         : 'bg-[#003f93] hover:bg-[#002f70] text-white'
                     }`}
                   >
-                    {isSubmitting ? (
+                    {isCompressing ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>Optimising document…</span>
+                      </>
+                    ) : isSubmitting ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" />
                         <span>Submitting registration…</span>

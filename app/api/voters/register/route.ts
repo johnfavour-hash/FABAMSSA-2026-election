@@ -25,8 +25,8 @@ export async function POST(request: Request) {
     if (!/^data:image\/(jpeg|png|webp);base64,/.test(idCardUrl)) {
       return NextResponse.json({ success: false, message: 'A clear image of your UNIPORT Student ID or recent Course Form is required.' }, { status: 400 });
     }
-    if (idCardUrl.length > 7_000_000) {
-      return NextResponse.json({ success: false, message: 'The uploaded document must be 5 MB or smaller.' }, { status: 413 });
+    if (idCardUrl.length > 1_500_000) {
+      return NextResponse.json({ success: false, message: 'The uploaded document is too large. Please use a smaller or lower-resolution image.' }, { status: 413 });
     }
 
     const matricNumber = String(payload.matricNumber).trim().toUpperCase();

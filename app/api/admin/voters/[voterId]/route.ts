@@ -3,6 +3,31 @@ import { getSupabaseAdmin } from '../../../../../lib/supabase/admin';
 import { readAdminSession } from '../../../../../lib/admin-session';
 import { writeAuditLog } from '../../../../../lib/audit-log';
 
+export const dynamic = 'force-dynamic';
+
+/**
+ * GET /api/admin/voters/[voterId]
+ * Fetches a single voter's full record including id_card_url for admin review.
+ * This is intentionally separate from the bulk /api/election query to avoid
+ * transferring large image payloads on every page load.
+ */
+export async function GET(request: Request, context: { params: Promise<{ voterId: string }> }) {
+  try {
+    if (!readAdminSession(request.headers.get('X-Admin-Session') || '')) {
+      return NextResponse.json({ success: false, message: 'Administrator login required.' }, { status: 401 });
+    }
+    const { voterId } = await context.params;
+    const supabase = getSupabaseAdmin();
+    const result = await supabase.from('voters').select('*').eq('id', voterId).maybeSingle();
+    if (result.error || !result.data) {
+      return NextResponse.json({ success: false, message: 'Voter not found.' }, { status: 404 });
+    }
+    return NextResponse.json({ success: true, voter: result.data }, { headers: { 'Cache-Control': 'no-store' } });
+  } catch {
+    return NextResponse.json({ success: false, message: 'Could not retrieve voter details.' }, { status: 503 });
+  }
+}
+
 export async function DELETE(request: Request, context: { params: Promise<{ voterId: string }> }) {
   try {
     if (!readAdminSession(request.headers.get('X-Admin-Session') || '')) return NextResponse.json({ success: false, message: 'Administrator login required.' }, { status: 401 });
