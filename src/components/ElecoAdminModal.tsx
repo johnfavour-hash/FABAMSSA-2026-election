@@ -19,11 +19,11 @@ export const ElecoAdminModal: React.FC<ElecoAdminModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    const success = loginAdmin(passcode);
+    const success = await loginAdmin(passcode);
     if (success) {
       onSuccess();
       onClose();
