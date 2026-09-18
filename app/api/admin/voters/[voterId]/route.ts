@@ -18,11 +18,11 @@ export async function GET(request: Request, context: { params: Promise<{ voterId
     }
     const { voterId } = await context.params;
     const supabase = getSupabaseAdmin();
-    const result = await supabase.from('voters').select('*').eq('id', voterId).maybeSingle();
-    if (result.error || !result.data) {
+    const { data: voterData, error: voterError } = (await supabase.from('voters').select('*').eq('id', voterId).maybeSingle()) as { data: Record<string, unknown> | null; error: unknown };
+    if (voterError || !voterData) {
       return NextResponse.json({ success: false, message: 'Voter not found.' }, { status: 404 });
     }
-    return NextResponse.json({ success: true, voter: result.data as unknown }, { headers: { 'Cache-Control': 'no-store' } });
+    return NextResponse.json({ success: true, voter: voterData }, { headers: { 'Cache-Control': 'no-store' } });
   } catch {
     return NextResponse.json({ success: false, message: 'Could not retrieve voter details.' }, { status: 503 });
   }
