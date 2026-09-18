@@ -287,6 +287,11 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       endTimeValue = new Date().toISOString();
     }
 
+    // Set state immediately for zero-lag UI response
+    setStatusState(newStatus);
+    setStartTime(startTimeValue);
+    setEndTime(endTimeValue);
+
     try {
       const response = await adminFetch(`${API_BASE}/admin/set-status`, {
         method: 'POST',
@@ -295,16 +300,12 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       });
       const payload = await response.json().catch(() => ({}));
       if (response.ok && payload.success) {
-        if (payload.start_time !== undefined) startTimeValue = payload.start_time;
-        if (payload.end_time !== undefined) endTimeValue = payload.end_time;
+        if (payload.start_time !== undefined) setStartTime(payload.start_time);
+        if (payload.end_time !== undefined) setEndTime(payload.end_time);
       }
     } catch {
-      // Backend sync notice; state updates locally
+      // Backend sync notice; state updated locally
     }
-
-    setStatusState(newStatus);
-    setStartTime(startTimeValue);
-    setEndTime(endTimeValue);
 
     addAuditLog(
       `Election Status Modified to [${newStatus}]`,

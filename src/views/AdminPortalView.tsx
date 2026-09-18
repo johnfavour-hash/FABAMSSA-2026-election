@@ -487,6 +487,14 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
 
   const handleStatusChange = (newStatus: ElectionStatus) => {
     setElectionStatus(newStatus);
+    showToast(
+      newStatus === 'LIVE'
+        ? 'Election launched successfully! Voting is now LIVE.'
+        : newStatus === 'CLOSED'
+          ? 'Voting session officially closed.'
+          : `Election status set to ${newStatus}.`,
+      'success'
+    );
   };
 
   const handleResultsFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -988,6 +996,28 @@ export const AdminPortalView: React.FC<AdminPortalViewProps> = ({ onLogout, onOp
                       </div>
 
                       <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleStatusChange(status === 'LIVE' ? 'CLOSED' : 'LIVE')}
+                          disabled={status === 'CERTIFIED'}
+                          className={`font-bold text-xs px-4 py-2.5 rounded-xl shadow-xs transition-colors cursor-pointer flex items-center gap-1.5 text-white disabled:opacity-50 disabled:cursor-not-allowed ${
+                            status === 'LIVE'
+                              ? 'bg-[#dc2626] hover:bg-[#b91c1c]'
+                              : 'bg-[#16a34a] hover:bg-[#15803d]'
+                          }`}
+                        >
+                          {status === 'LIVE' ? (
+                            <>
+                              <AlertTriangle className="w-4 h-4" />
+                              Stop Election
+                            </>
+                          ) : (
+                            <>
+                              <PlayCircle className="w-4 h-4" />
+                              Start Live Election
+                            </>
+                          )}
+                        </button>
                         <button
                           type="button"
                           onClick={() => setActiveTab('settings')}
