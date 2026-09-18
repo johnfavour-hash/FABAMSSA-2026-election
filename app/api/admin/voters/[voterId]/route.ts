@@ -22,7 +22,7 @@ export async function GET(request: Request, context: { params: Promise<{ voterId
     if (result.error || !result.data) {
       return NextResponse.json({ success: false, message: 'Voter not found.' }, { status: 404 });
     }
-    return NextResponse.json({ success: true, voter: result.data }, { headers: { 'Cache-Control': 'no-store' } });
+    return NextResponse.json({ success: true, voter: result.data as unknown }, { headers: { 'Cache-Control': 'no-store' } });
   } catch {
     return NextResponse.json({ success: false, message: 'Could not retrieve voter details.' }, { status: 503 });
   }
